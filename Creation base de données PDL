@@ -1,15 +1,51 @@
-DROP TABLE  LOCATAIRE;
 
-CREATE TABLE LOCATAIRE (
-    idLocataire INT PRIMARY KEY, 
-    nom VARCHAR(150), 
-    prenom VARCHAR(150), 
-    adresse VARCHAR(150), 
-    email VARCHAR(250), 
-    telephone VARCHAR(20)
+DROP TABLE BAIL_LOCATAIRE;
+DROP TABLE BAIL;
+DROP TABLE LOCATAIRE;
+DROP TABLE BAILLEUR;
+DROP TABLE BIEN;
+DROP TABLE GARANT;
+DROP TABLE EMPLOYE;
+
+CREATE TABLE GARANT (
+    idGarant INT PRIMARY KEY, 
+    nomGarant VARCHAR(150), 
+    prenomGarant VARCHAR(150), 
+    adresse VARCHAR(150)
 );
 
-DROP TABLE IF EXISTS BAILLEUR;
+CREATE TABLE BIEN (
+    idBien NUMBER(10,0), 
+    typeBien VARCHAR2(100), 
+    nombreChambre NUMBER, 
+    anneeConstruction NUMBER,
+    arrondissement NUMBER,
+    ville VARCHAR2(50),
+    numAppartement NUMBER,
+    numEtage NUMBER,
+    numRue NUMBER,
+    typeRue VARCHAR2(50),
+    nomRue VARCHAR2(200),
+    nomResidence VARCHAR2(150),
+    isChauffageIndividuel NUMBER(1),
+    typeChauffage VARCHAR2(100),
+    isJardin NUMBER(1), 
+    isMeuble NUMBER(1), 
+    isTerrain NUMBER(1),
+    surfaceTerrain NUMBER,
+    isEscalier NUMBER(1),
+    isCave NUMBER(1), 
+    isSousSol NUMBER(1),
+    isCour NUMBER(1),
+    surfaceCour NUMBER,
+    isBalcon NUMBER(1), 
+    surfaceBalcon NUMBER(10,2), 
+    isTerrasse NUMBER(1), 
+    surfaceTerasse NUMBER, 
+    descriptionMeuble VARCHAR2(300),
+    
+    CONSTRAINT PK_BIEN PRIMARY KEY(idBien)  
+);
 
 CREATE TABLE BAILLEUR (
     idBailleur INT PRIMARY KEY, 
@@ -20,33 +56,27 @@ CREATE TABLE BAILLEUR (
     telephone VARCHAR(20)
 );
 
-DROP TABLE GARANT;
-
-CREATE TABLE GARANT (
-    idGarant INT PRIMARY KEY, 
-    nomGarant VARCHAR(150), 
-    prenomGarant VARCHAR(150), 
-    idAdresse INT
+CREATE TABLE LOCATAIRE (
+    idLocataire INT PRIMARY KEY, 
+    nom VARCHAR2(150), 
+    prenom VARCHAR2(150), 
+    adresse VARCHAR2(150), 
+    email VARCHAR2(250), 
+    telephone VARCHAR2(20),
+    societe VARCHAR2(100),
+    raisonSociale VARCHAR2(100),
+    idBail NUMBER,
+    idBien NUMBER,
+    CONSTRAINT FK_LOCATAIRE_BAIL FOREIGN KEY(idBail) REFERENCES BAIL_LOCATAIRE(idBail),
+    CONSTRAINT FK_LOCATAIRE_BIEN FOREIGN KEY(idBien) REFERENCES BIEN(idBien)
 );
 
-DROP TABLE IF EXISTS BIEN;
-
-CREATE TABLE BIEN (
-    idBien NUMBER(10,0), 
-    typeBien VARCHAR2(100), 
-    nombreChambre NUMBER(5,0), 
-    isJardin NUMBER(1), 
-    isMeuble NUMBER(1), 
-    isCave NUMBER(1), 
-    isBalcon NUMBER(1), 
-    surfaceBalcon NUMBER(10,2), 
-    isTerrasse NUMBER(1), 
-    surfaceTerasse NUMBER(10,2), 
-    CONSTRAINT PK_BIEN PRIMARY KEY(idBien)  
+CREATE TABLE BAIL_LOCATAIRE(
+    idLocataire NUMBER,
+    idBail NUMBER,
+    
+    CONSTRAINT PK_BAIL_LOCATAIRE PRIMARY KEY (idLocataire, idBail)
 );
-
-DROP TABLE BAIL;
-
 
 CREATE TABLE BAIL (
     idBail NUMBER PRIMARY KEY,
@@ -60,14 +90,17 @@ CREATE TABLE BAIL (
     fraisAgence FLOAT,
     dateEcheance DATE,
     freqRevision NUMBER,
+    isGarant NUMBER(1),
     nomGarant VARCHAR2(150),
     prenomGarant VARCHAR2(150),
     idBailleur NUMBER,
-    CONSTRAINT FK_BAIL_BAILLEUR FOREIGN KEY(idBailleur) REFERENCES BAILLEUR(idBailleur),
     idLocataire NUMBER,
-    CONSTRAINT FK_BAIL_LOCATAIRE FOREIGN KEY(idLocataire) REFERENCES LOCATAIRE(idLocataire),
     idGarant NUMBER,
+    CONSTRAINT FK_BAIL_BAILLEUR FOREIGN KEY(idBailleur) REFERENCES BAILLEUR(idBailleur),
+    CONSTRAINT FK_BAIL_LOCATAIRE FOREIGN KEY(idLocataire) REFERENCES BAIL_LOCATAIRE(idLocataire),
     CONSTRAINT FK_BAIL_GARANT FOREIGN KEY(idGarant) REFERENCES GARANT(idGarant)
-    
-    
-    );
+);
+
+CREATE TABLE EMPLOYE(
+    idEmploye NUMBER PRIMARY KEY
+);
