@@ -1,5 +1,6 @@
 
 
+
 CREATE TABLE GARANT (
     idGarant INT PRIMARY KEY, 
     nomGarant VARCHAR(150), 
@@ -23,6 +24,7 @@ CREATE TABLE BIEN (
     isChauffageIndividuel NUMBER(1),
     typeChauffage VARCHAR2(100),
     isJardin NUMBER(1), 
+    surfaceJardin NUMBER,
     isMeuble NUMBER(1), 
     isTerrain NUMBER(1),
     surfaceTerrain NUMBER,
