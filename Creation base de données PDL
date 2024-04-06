@@ -111,3 +111,6 @@ CREATE TABLE EMPLOYE(
     login VARCHAR2(50),
     password VARCHAR2(50)
 );
+
+
+INSERT INTO EMPLOYE (idEmploye, login, password) VALUES (1, 'username', 'password');
