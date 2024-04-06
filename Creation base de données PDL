@@ -1,4 +1,11 @@
 
+DROP TABLE BAIL_LOCATAIRE;
+DROP TABLE BAIL;
+DROP TABLE LOCATAIRE;
+DROP TABLE BAILLEUR;
+DROP TABLE BIEN;
+DROP TABLE GARANT;
+DROP TABLE EMPLOYE;
 
 
 CREATE TABLE GARANT (
@@ -11,6 +18,9 @@ CREATE TABLE GARANT (
 CREATE TABLE BIEN (
     idBien NUMBER(10,0), 
     typeBien VARCHAR2(100), 
+    surfaceBien NUMBER,
+    isMaisonIndividuelle NUMBER(1),
+    isAppartement NUMBER(1),
     nombreChambre NUMBER, 
     anneeConstruction NUMBER,
     arrondissement NUMBER,
