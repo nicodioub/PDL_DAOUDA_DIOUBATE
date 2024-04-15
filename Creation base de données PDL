@@ -24,6 +24,7 @@ CREATE TABLE BIEN (
     idBien NUMBER(10,0), 
     typeBien VARCHAR2(100), 
     surfaceBien NUMBER,
+    codePostal NUMBER,
     isMaisonIndividuelle NUMBER(1),
     isAppartement NUMBER(1),
     nombreChambre NUMBER, 
