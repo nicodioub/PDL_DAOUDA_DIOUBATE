@@ -25,6 +25,11 @@ public class Bien {
 	protected int arrondissement;
 	
 	/**
+	 * Code postal du bien
+	 */
+	protected int codePostal;
+	
+	/**
 	 * Numero de la rue du bien
 	 */
 	protected int numRue;
@@ -215,14 +220,15 @@ public class Bien {
 	 * @param etage : valeur d'etage quelconque
 	 * @param numAppartement : valeur quelconque
 	 */
-	public Bien (int idBien, String ville, int arrondissement, int numRue, String typeRue, String nomRue,
+	public Bien (String ville, int codePostal, int arrondissement, int numRue, String typeRue, String nomRue,
 			String type, String residence, float surface, int nombreChambres, String descriptionMeubles,
 			boolean meuble, boolean balcon, boolean terrasse, float surfaceTerrasse, float surfaceBalcon, 
-			int anneeConstruction,
-			String typeChauffage, boolean appartement, boolean maisonIndividuelle) {
-		if (appartement==true && maisonIndividuelle==false) {
-			this.idBien = idBien;
+			int anneeConstruction, boolean escalier, int etage, boolean sous_sol, boolean cave, boolean cour, 
+            boolean jardin, boolean terrain, float surfaceCour, float surfaceJardin, float surfaceTerrain, 
+            String typeChauffage, boolean chauffageIndividuel, boolean appartement, boolean maisonIndividuelle, 
+            int numAppartement) {
 			this.ville = ville;
+			this.codePostal = codePostal;
 			this.arrondissement = arrondissement;
 			this.numRue = numRue;
 			this.typeRue = typeRue;
@@ -239,9 +245,24 @@ public class Bien {
 			this.surfaceBalcon = surfaceBalcon;
 			this.anneeConstruction = anneeConstruction;
 			this.typeChauffage = typeChauffage;
-			this.appartement = appartement;
-			this.maisonIndividuelle = maisonIndividuelle;
-		}
+			
+			if (appartement == false && maisonIndividuelle == true) {
+				this.sous_sol = sous_sol;
+				this.cave = cave;
+				this.cour = cour;
+				this.jardin = jardin;
+				this.terrain = terrain;
+				this.surfaceCour = surfaceCour;
+				this.surfaceJardin = surfaceJardin;
+				this.surfaceTerrain = surfaceTerrain;
+			}
+			
+			if (appartement == true && maisonIndividuelle == false) {
+				this.escalier = escalier;
+				this.etage = etage;
+				this.numAppartement = numAppartement;
+				this.chauffageIndividuel = chauffageIndividuel;
+			}
 	}
 	
 	/**
@@ -253,46 +274,6 @@ public class Bien {
 		return idBien;
 	}
 	
-	/**
-	 * Permet de modifier les attributs d'un appartement
-	 */
-	public void setAppartement(boolean escalier, boolean chauffageIndividuel, 
-			                   int etage, int numAppartement) {
-		if (appartement==false && maisonIndividuelle==true ) {
-			this.escalier = escalier;
-			this.chauffageIndividuel = chauffageIndividuel;
-			this.etage = etage;
-			this.numAppartement = numAppartement;
-			cave = false;
-			sous_sol = false;
-			cour = false;
-			jardin = false;
-			terrain = false;
-			surfaceCour = 0;
-			surfaceJardin = 0;
-			surfaceTerrain = 0;
-		}
-	}
-	
-	/**
-	 * Permet de modifier les attributs d'une maison individuelle
-	 */
-	public void setMaisonIndividuelle(boolean cave, boolean sous_sol, boolean cour, 
-			                          boolean jardin, boolean terrain, float surfaceCour, 
-			                          float surfaceJardin, float surfaceTerrain) {
-		this.cave = cave;
-		this.sous_sol = sous_sol;
-		this.cour = cour;
-		this.jardin = jardin;
-		this.terrain = terrain;
-		this.surfaceCour = surfaceCour;
-		this.surfaceJardin = surfaceJardin;
-		this.surfaceTerrain = surfaceTerrain;
-		escalier = false;
-		chauffageIndividuel = false;
-		etage = 0;
-		numAppartement = 0;
-	}
 
 	/**
 	 * getter de l'attribut ville
@@ -330,6 +311,25 @@ public class Bien {
 	 */
 	public void setArrondissement(int arrondissement) {
 		this.arrondissement = arrondissement;
+	}
+	
+	/**
+	 * getter de l'attribut codePostal
+	 * 
+	 * @return l'attribut arrondissement
+	 */
+	public int getCodePostal() {
+		return codePostal;
+	}
+
+	
+	/**
+	 * setter de l'attribut codePostal
+	 * 
+	 * @param codePostal : nouvelle valeur pour le code postal
+	 */
+	public void setCodePostal(int codePostal) {
+		this.codePostal = codePostal;
 	}
 
 	/**
@@ -784,9 +784,9 @@ public class Bien {
 	 * affiche les informations sur un bien immobilier
 	 */
 	public void display() {
-		System.out.println("Identifiant du bien : " + idBien);
-		System.out.println("\nVille : " + ville + "\nArrondissement : " + arrondissement);
-		System.out.print("\nNumero de rue : " + numRue + "\nType de rue : " + typeRue);
+		System.out.println("Identifiant du bien : " + getIdBien());
+		System.out.println("\nVille : " + ville  + "\nCode postal : " + codePostal  + "\nArrondissement : " + arrondissement);
+		System.out.print("\nType de rue : " + typeRue + "\nNumero de rue : " + numRue);
 		System.out.print("\nNom de rue : " + nomRue + "\nType : " + type);
 		System.out.print("\nResidence : " + residence + "\nSurface : " + surface + " m2");
 		System.out.print("\nNombre de chambres : " + nombreChambres + "\nDescription des meubles : " + descriptionMeubles);
@@ -796,8 +796,10 @@ public class Bien {
 		else
 			System.out.print("Non");
 		System.out.print("\nBalcon : ");
-		if (balcon == true)
+		if (balcon == true) {
 			System.out.print("Oui");
+			System.out.println("Surface du balcon : " + surfaceBalcon + " m2");
+		}
 		else
 			System.out.print("Non");
 		System.out.print("\nTerrasse : ");
@@ -854,7 +856,7 @@ public class Bien {
 			if (chauffageIndividuel == true)
 				System.out.print("Oui");
 			else
-				System.out.print("Non");
+				System.out.print("Non (commun)");
 			System.out.print("\nEscalier : ");
 			if (escalier == true)
 				System.out.print("Oui");
