@@ -18,6 +18,69 @@ public class BienDAO extends ConnectionDAO {
 	public BienDAO() {
 		super();
 	}
+	
+	/**
+	 * Convertit true en 1 et false en 0
+	 * 
+	 * @param bool : un booléen
+	 * @return 1 ou 0
+	 */
+	public int convertToBinary(boolean bool) {
+		if (bool == true)
+			return 1;
+		else
+			return 0;
+	}
+	
+	/**
+	 * Permet de récupérer l'id macimum et l'incrémente de 1
+	 * 
+	 * @return (l'Idmax + 1)
+	 */
+	public int getMaxIdBien() {
+		Connection con = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+        int maxId = 0;
+        try {
+            // Créer une connexion à la base de données et exécuter une requête pour obtenir le maximum de l'ID
+            // Ici, vous devez utiliser votre logique spécifique pour accéder à la base de données
+            // Par exemple, si vous utilisez JDBC :
+            con = DriverManager.getConnection(URL, LOGIN, PASS);
+            stmt = con.createStatement();
+            rs = stmt.executeQuery("SELECT MAX(idBien) AS max_id FROM BIEN");
+            if (rs.next()) {
+                maxId = rs.getInt("max_id");
+            }
+            // Fermer les ressources
+            rs.close();
+            stmt.close();
+            con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+			// fermeture du preparedStatement et de la connexion
+        	try {
+				if (rs != null) {
+					rs.close();
+				}
+			} catch (Exception ignore) {
+			}
+			try {
+				if (stmt != null) {
+					stmt.close();
+				}
+			} catch (Exception ignore) {
+			}
+			try {
+				if (con != null) {
+					con.close();
+				}
+			} catch (Exception ignore) {
+			}
+		}
+        return (maxId+1);
+    }
 
 	/**
 	 * Permet d'ajouter un bien dans la table BIEN 
@@ -39,41 +102,42 @@ public class BienDAO extends ConnectionDAO {
 			// preparation de l'instruction SQL, chaque ? represente une valeur
 			// a communiquer dans l'insertion.
 			// les getters permettent de recuperer les valeurs des attributs souhaites
-			ps = con.prepareStatement("INSERT INTO BIEN(idBien, typeBien, nombreChambre, anneeConstruction, arrondissement, ville, numAppartement, numEtage, numRue, typeRue, nomRue, nomResidence, isChauffageIndividuel, typeChauffage, isMaisonIndividuelle, isAppartement) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-			ps.setInt(1, bien.getIdBien());
+			ps = con.prepareStatement("INSERT INTO BIEN(idBien, typeBien, surfaceBien, codePostal, isMaisonIndividuelle, isAppartement, nombreChambre, anneeConstruction, arrondissement, ville, numAppartement, numEtage, numRue, typeRue, nomRue, nomResidence, isChauffageIndividuel, typeChauffage, isJardin, surfaceJardin, isMeuble, isTerrain, surfaceTerrain, isEscalier, isCave, isSousSol, isCour, surfaceCour, isBalcon, surfaceBalcon, isTerrasse, surfaceTerasse, descriptionMeuble) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+			ps.setInt(1, getMaxIdBien());
 			ps.setString(2, bien.getType());
-			ps.setInt(3, bien.getNombreChambres());
-			ps.setInt(4, bien.getAnneeConstruction());
-			ps.setInt(5, bien.getArrondissement());
-			ps.setString(6, bien.getVille());
-			ps.setInt(7, bien.getNumAppartement());
-			ps.setInt(8, bien.getEtage());
-			ps.setInt(9, bien.getNumRue());
-			ps.setString(10, bien.getTypeRue());
-			ps.setString(11, bien.getNomRue());
-			ps.setString(12, bien.getResidence());
-			ps.setBoolean(13, bien.aChauffageIndividuel());
-			ps.setString(14, bien.getTypeChauffage());
-			ps.setBoolean(15, bien.isMaisonIndividuelle());
-			ps.setBoolean(16, bien.isAppartement());
-			ps.close();
-			ps = con.prepareStatement("INSERT INTO BIEN(isJardin, isMeuble, isTerrain, surfaceTerrain, isEscalier, isCave, isSousSol, isCour, surfaceCour, isBalcon, surfaceJardin, isTerrasse, surfaceTerrasse, descriptionMeuble, surfaceBalcon, surfaceBien) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-			ps.setBoolean(1, bien.aUnJardin());
-			ps.setBoolean(2, bien.isMeuble());
-			ps.setBoolean(3, bien.aUnTerrain());
-			ps.setFloat(4, bien.getSurfaceTerrain());
-			ps.setBoolean(5, bien.aUnEscalier());
-			ps.setBoolean(6, bien.aUneCave());
-			ps.setBoolean(7, bien.aUnSousSol());
-			ps.setBoolean(8, bien.aUneCour());
-			ps.setFloat(9, bien.getSurfaceCour());
-			ps.setBoolean(10, bien.aUnBalcon());
-			ps.setFloat(11, bien.getSurfaceJardin());
-			ps.setBoolean(12, bien.aUneTerrasse());
-			ps.setFloat(13, bien.getSurfaceTerrasse());
-			ps.setString(14, bien.getDescriptionMeubles());
-			ps.setFloat(15, bien.getSurfaceBalcon());
-			ps.setFloat(16, bien.getSurface());
+			ps.setFloat(3, bien.getSurface());
+			ps.setInt(4, bien.getCodePostal());
+			ps.setInt(5, convertToBinary(bien.isMaisonIndividuelle()));
+			ps.setInt(6, convertToBinary(bien.isAppartement()));
+			ps.setInt(7, bien.getNombreChambres());
+			ps.setInt(8, bien.getAnneeConstruction());
+			ps.setInt(9, bien.getArrondissement());
+			ps.setString(10, bien.getVille());
+			ps.setInt(11, bien.getNumAppartement());
+			ps.setInt(12, bien.getEtage());
+			ps.setInt(13, bien.getNumRue());
+			ps.setString(14, bien.getTypeRue());
+			ps.setString(15, bien.getNomRue());
+			ps.setString(16, bien.getResidence());
+			ps.setInt(17, convertToBinary(bien.aChauffageIndividuel()));
+			ps.setString(18, bien.getTypeChauffage());	
+			ps.setInt(19, convertToBinary(bien.aUnJardin()));
+			ps.setFloat(20, bien.getSurfaceJardin());
+			ps.setInt(21, convertToBinary(bien.isMeuble()));
+			ps.setInt(22, convertToBinary(bien.aUnTerrain()));
+			ps.setFloat(23, bien.getSurfaceTerrain());
+			ps.setInt(24, convertToBinary(bien.aUnEscalier()));
+			ps.setInt(25, convertToBinary(bien.aUneCave()));
+			ps.setInt(26, convertToBinary(bien.aUnSousSol()));
+			ps.setInt(27, convertToBinary(bien.aUneCour()));
+			ps.setFloat(28, bien.getSurfaceCour());
+			ps.setInt(29, convertToBinary(bien.aUnBalcon()));
+			ps.setFloat(30, bien.getSurfaceBalcon());
+			ps.setInt(31, convertToBinary(bien.aUneTerrasse()));
+			ps.setFloat(32, bien.getSurfaceTerrasse());
+			ps.setString(33, bien.getDescriptionMeubles());
+			
+			
 
 			// Execution de la requete
 			returnValue = ps.executeUpdate();
@@ -121,42 +185,40 @@ public class BienDAO extends ConnectionDAO {
 			// preparation de l'instruction SQL, chaque ? represente une valeur
 			// a communiquer dans la modification.
 			// les getters permettent de recuperer les valeurs des attributs souhaites
-			ps = con.prepareStatement("UPDATE BIEN set typeBien = ?, nombreChambre = ?, anneeConstruction = ?, arrondissement = ?, ville = ?, numAppartement = ?, numEtage = ?, numRue = ?, typeRue = ?, nomRue = ?, nomResidence = ?, isChauffageIndividuel = ?, typeChauffage = ?, isJardin = ?, isMaisonIndividuelle = ?, isAppartement = ? WHERE id = ?");
+			ps = con.prepareStatement("UPDATE BIEN set typeBien = ?, surfaceBien = ?, codePostal = ?, isMaisonIndividuelle = ?, isAppartement = ?, nombreChambre = ?, anneeConstruction = ?, arrondissement = ?, ville = ?, numAppartement = ?, numEtage = ?, numRue = ?, typeRue = ?, nomRue = ?, nomResidence = ?, isChauffageIndividuel = ?, typeChauffage = ?, isJardin = ?, surfaceJardin = ?, isMeuble = ?, isTerrain = ?, surfaceTerrain = ?, isEscalier = ?, isCave = ?, isSousSol = ?, isCour = ?, surfaceCour = ?, isBalcon = ?, surfaceBalcon = ?, isTerrasse = ?, surfaceTerrasse = ?, descriptionMeuble = ? WHERE id = ?");
 			ps.setString(1, bien.getType());
-			ps.setInt(2, bien.getNombreChambres());
-			ps.setInt(3, bien.getAnneeConstruction());
-			ps.setInt(4, bien.getArrondissement());
-			ps.setString(5, bien.getVille());
-			ps.setInt(6, bien.getNumAppartement());
-			ps.setInt(7, bien.getEtage());
-			ps.setInt(8, bien.getNumRue());
-			ps.setString(9, bien.getTypeRue());
-			ps.setString(10, bien.getNomRue());
-			ps.setString(11, bien.getResidence());
-			ps.setBoolean(12, bien.aChauffageIndividuel());
-			ps.setString(13, bien.getTypeChauffage());
-			ps.setBoolean(14, bien.aUnJardin());
-			ps.setBoolean(15, bien.isMaisonIndividuelle());
-			ps.setBoolean(16, bien.isAppartement());
-			ps.setInt(17, bien.getIdBien());
-			ps.close();
-			ps = con.prepareStatement("UPDATE BIEN set surfaceJardin = ?, isMeuble = ?, isTerrain = ?, surfaceTerrain = ?, isEscalier = ?, isCave = ?, isSousSol = ?, isCour = ?, surfaceCour = ?, isBalcon = ?, surfaceBalcon = ?, isTerrasse = ?, surfaceTerrasse = ?, descriptionMeuble = ?, surfaceBien = ? WHERE idBien = ?");
-			ps.setFloat(1, bien.getSurfaceJardin());
-			ps.setBoolean(2, bien.isMeuble());
-			ps.setBoolean(3, bien.aUnTerrain());
-			ps.setFloat(4, bien.getSurfaceTerrain());
-			ps.setBoolean(5, bien.aUnEscalier());
-			ps.setBoolean(6, bien.aUneCave());
-			ps.setBoolean(7, bien.aUnSousSol());
-			ps.setBoolean(8, bien.aUneCour());
-			ps.setFloat(9, bien.getSurfaceCour());
-			ps.setBoolean(10, bien.aUnBalcon());
-			ps.setFloat(11, bien.getSurfaceBalcon());
-			ps.setBoolean(12, bien.aUneTerrasse());
-			ps.setFloat(13, bien.getSurfaceTerrasse());
-			ps.setString(14, bien.getDescriptionMeubles());
-			ps.setFloat(15, bien.getSurface());
-			ps.setInt(16, bien.getIdBien());
+			ps.setFloat(2, bien.getSurface());
+			ps.setInt(3, bien.getCodePostal());
+			ps.setBoolean(4, bien.isMaisonIndividuelle());
+			ps.setBoolean(5, bien.isAppartement());
+			ps.setInt(6, bien.getNombreChambres());
+			ps.setInt(7, bien.getAnneeConstruction());
+			ps.setInt(8, bien.getArrondissement());
+			ps.setString(9, bien.getVille());
+			ps.setInt(10, bien.getNumAppartement());
+			ps.setInt(11, bien.getEtage());
+			ps.setInt(12, bien.getNumRue());
+			ps.setString(13, bien.getTypeRue());
+			ps.setString(14, bien.getNomRue());
+			ps.setString(15, bien.getResidence());
+			ps.setBoolean(16, bien.aChauffageIndividuel());
+			ps.setString(17, bien.getTypeChauffage());	
+			ps.setBoolean(18, bien.aUnJardin());
+			ps.setFloat(19, bien.getSurfaceJardin());
+			ps.setBoolean(20, bien.isMeuble());
+			ps.setBoolean(21, bien.aUnTerrain());
+			ps.setFloat(22, bien.getSurfaceTerrain());
+			ps.setBoolean(23, bien.aUnEscalier());
+			ps.setBoolean(24, bien.aUneCave());
+			ps.setBoolean(25, bien.aUnSousSol());
+			ps.setBoolean(26, bien.aUneCour());
+			ps.setFloat(27, bien.getSurfaceCour());
+			ps.setBoolean(28, bien.aUnBalcon());
+			ps.setFloat(29, bien.getSurfaceBalcon());
+			ps.setBoolean(30, bien.aUneTerrasse());
+			ps.setFloat(31, bien.getSurfaceTerrasse());
+			ps.setString(32, bien.getDescriptionMeubles());
+			ps.setInt(33, bien.getIdBien());
 
 			// Execution de la requete
 			returnValue = ps.executeUpdate();
@@ -251,32 +313,23 @@ public class BienDAO extends ConnectionDAO {
 			rs = ps.executeQuery();
 			// passe a la premiere (et unique) ligne retournee
 			if (rs.next()) {
-				returnValue = new Bien(rs.getInt("idBien"),
-											rs.getString("ville"), 
-											rs.getInt("arrondissement"),
-											rs.getInt("numRue"),
-											rs.getString("typeRue"),
-											rs.getString("nomRue"),
-											rs.getString("typeBien"),
-											rs.getString("nomResidence"),
-											rs.getFloat("surfaceBien"),
-											rs.getInt("nombreChambre"),
-											rs.getString("descriptionMeuble"),
-											rs.getBoolean("isMeuble"),
-											rs.getBoolean("isBalcon"),
-											rs.getBoolean("isTerrasse"),
-											rs.getFloat("surfaceTerrasse"),
-											rs.getFloat("surfaceBalcon"),
-											rs.getInt("anneeConstruction"),
-											rs.getString("typeChauffage"),
-											rs.getBoolean("isAppartement"),
-											rs.getBoolean("isMaisonIndividuelle"));
-				returnValue.setAppartement(rs.getBoolean("isEscalier"), rs.getBoolean("isChauffageIndividuel"),
-						                   rs.getInt("numEtage"), rs.getInt("numAppartement"));
-				returnValue.setMaisonIndividuelle(rs.getBoolean("isCave"), rs.getBoolean("isSousSol"), 
-						                          rs.getBoolean("isCour"), rs.getBoolean("isJardin"), 
-						                          rs.getBoolean("isTerrain"), rs.getFloat("surfaceCour"), 
-						                          rs.getFloat("surfaceJardin"), rs.getFloat("surfaceTerrain"));
+				returnValue = new Bien(rs.getInt("idBien"), rs.getString("typeBien"), 
+									   rs.getFloat("surfaceBien"), rs.getInt("codePostal"),
+									   rs.getBoolean("isMaisonIndividuelle"), rs.getBoolean("isAppartement"),
+									   rs.getInt("nombreChambre"), rs.getInt("anneeConstruction"),
+									   rs.getInt("arrondissement"), rs.getString("ville"),
+									   rs.getInt("numAppartement"), rs.getInt("numEtage"),
+									   rs.getInt("numRue"), rs.getString("typeRue"),
+									   rs.getString("nomRue"), rs.getString("nomResidence"),
+									   rs.getBoolean("isChauffageIndividuel"), rs.getString("typeChauffage"),
+							           rs.getBoolean("isJardin"), rs.getFloat("surfaceJardin"),
+								   	   rs.getBoolean("isMeuble"), rs.getBoolean("isTerrain"),
+									   rs.getFloat("surfaceTerrain"), rs.getBoolean("isEscalier"),
+									   rs.getBoolean("isCave"), rs.getBoolean("isSousSol"),
+									   rs.getBoolean("isCour"), rs.getFloat("surfaceCour"),
+									   rs.getBoolean("isBalcon"), rs.getFloat("surfaceBalcon"),
+									   rs.getBoolean("isTerrasse"), rs.getFloat("surfaceTerrasse"),
+									   rs.getString("descriptionMeuble"));
 			}
 		} catch (Exception ee) {
 			ee.printStackTrace();
@@ -324,16 +377,23 @@ public class BienDAO extends ConnectionDAO {
 			rs = ps.executeQuery();
 			// on parcourt les lignes du resultat
 			while (rs.next()) {
-				returnValue.add(new Bien(rs.getInt("idBien"), rs.getString("ville"), 
-										 rs.getInt("arrondissement"), rs.getInt("numRue"),
-										 rs.getString("typeRue"), rs.getString("nomRue"),
-										 rs.getString("typeBien"), rs.getString("nomResidence"),
-										 rs.getFloat("surfaceBien"), rs.getInt("nombreChambre"),
-										 rs.getString("descriptionMeuble"), rs.getBoolean("isMeuble"),
-										 rs.getBoolean("isBalcon"), rs.getBoolean("isTerrasse"),
-										 rs.getFloat("surfaceTerrasse"), rs.getFloat("surfaceBalcon"),
-							             rs.getInt("anneeConstruction"), rs.getString("typeChauffage"),
-										 rs.getBoolean("isAppartement"), rs.getBoolean("isMaisonIndividuelle")));
+				returnValue.add(new Bien(rs.getInt("idBien"), rs.getString("typeBien"), 
+										 rs.getFloat("surfaceBien"), rs.getInt("codePostal"),
+										 rs.getBoolean("isMaisonIndividuelle"), rs.getBoolean("isAppartement"),
+										 rs.getInt("nombreChambre"), rs.getInt("anneeConstruction"),
+										 rs.getInt("arrondissement"), rs.getString("ville"),
+										 rs.getInt("numAppartement"), rs.getInt("numEtage"),
+										 rs.getInt("numRue"), rs.getString("typeRue"),
+										 rs.getString("nomRue"), rs.getString("nomResidence"),
+										 rs.getBoolean("isChauffageIndividuel"), rs.getString("typeChauffage"),
+							             rs.getBoolean("isJardin"), rs.getFloat("surfaceJardin"),
+										 rs.getBoolean("isMeuble"), rs.getBoolean("isTerrain"),
+										 rs.getFloat("surfaceTerrain"), rs.getBoolean("isEscalier"),
+										 rs.getBoolean("isCave"), rs.getBoolean("isSousSol"),
+										 rs.getBoolean("isCour"), rs.getFloat("surfaceCour"),
+										 rs.getBoolean("isBalcon"), rs.getFloat("surfaceBalcon"),
+										 rs.getBoolean("isTerrasse"), rs.getFloat("surfaceTerrasse"),
+										 rs.getString("descriptionMeuble")));
 			}
 		} catch (Exception ee) {
 			ee.printStackTrace();
