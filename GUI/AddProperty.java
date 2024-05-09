@@ -1,13 +1,14 @@
 package gui;
 
 import javax.swing.*;
+import dao.*;
+import model.*;
 import java.awt.*;
 import java.awt.event.*;
 
 public class AddProperty extends JFrame {
 	
 	private JPanel jlBackground;
-	private JLabel jlColor;
 	private JButton enregistrer;
 	private Container container;
 	
@@ -26,8 +27,9 @@ public class AddProperty extends JFrame {
 	private String choixEscalierOuNon;
 	private String typeVoieChoisi;
 	private String choixAppartOuMaison;
+	private String choixChauffageIndividuelOuNon;
 	
-	
+	//
 	// Création du menu de types de bien
 	String[] typesChauffage = {"Type de chauffage", "Chauffage électrique", "Chaudière", "Poêle", "Chauffage au bois", "Pompe à chaleur", "Radiateur à eau chaude", "Plancher chauffant à eau chaude", "Plancher/plafond rayonnant", "Système de régulation et de programmation"};
     private JComboBox<String> menuTypesChauffage = new JComboBox<>(typesChauffage);
@@ -79,6 +81,12 @@ public class AddProperty extends JFrame {
     // Création du menu de choix appartement/maison individuelle
    	String[] choixMenuAppartOuMaison = {"Appartement/Maison individuelle", "Appartement", "Maison individuelle"};
     private JComboBox<String> menuAppartOuMaison = new JComboBox<>(choixMenuAppartOuMaison);
+
+    // Création du menu de choix chauffage individuel
+   	String[] choixChauffageIndividuel = {"Chauffage Individuel", "Oui", "Non"};
+    private JComboBox<String> menuChauffageIndividuel = new JComboBox<>(choixChauffageIndividuel);
+    
+    
     
     // Zone de texte pour la surface du bien 
     private JTextField surfaceBien = new JTextField("Surface du bien");
@@ -99,7 +107,7 @@ public class AddProperty extends JFrame {
     private JTextField surfaceTerrasse = new JTextField("Surface de la terrasse");
     
     // Zone de texte pour l'annee de construction
-    private JTextField anneeConstruction = new JTextField("Annee de construction");
+    private JTextField anneeConstruction = new JTextField("Année de construction");
     
     // Zone de texte pour le nombre de chambres 
     private JTextField nombreChambres = new JTextField("Nombre de chambres");
@@ -128,74 +136,81 @@ public class AddProperty extends JFrame {
     // Zone de texte pour le numero de rue
     private JTextField numRue = new JTextField("Numéro de la rue");
     
-    
-    // Mettre tous les boolean en true or false avec des points
-    // faire deux pages différentes si il s'agit d'un appartement ou d'une maison 
-    private JTextField isChauffageIndividuel;    // Variables de récupération
+    // Zone de texte pour le code postal
+    private JTextField codePostal = new JTextField("Code postal");;  
     
 
 	public AddProperty (String title, int width, int height) {
 			
 			this.setTitle(title);
 			this.setSize(width, height);
-			this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);			
 			
-			int buttonWidth = 100; // Largeur du JButton
-	        int buttonHeight = 30; // Hauteur du JButton
-	        
-	        
-	        // mettre quelque chose à choic unique (oui/non)
-	        isChauffageIndividuel = new JTextField("Chauffage Individuelle");
-	        
-	        
 			jlBackground = new JPanel();
 			this.setContentPane(jlBackground);
 			enregistrer = new JButton("Enregistrer");
-			container = this.getContentPane();
-			
-			
-			
-		    //table.setBackground(Color.BLACK); // Change to desired color
-	
-			
-	        
-			//scrollPane.getViewport().setBackground(Color.BLACK); // Change to desired color
-	
-		        
+			container = this.getContentPane();			
 			container.setLayout(null); // Définir le layout sur null pour permettre le positionnement absolu
-	        menuTypesBien.setBounds(100,50,275,30);
-	        surfaceBien.setBounds(100,90,275,30);
-	        menuAppartOuMaison.setBounds(100,130,275,30);
-	        nombreChambres.setBounds(100,170,275,30);
-	        anneeConstruction.setBounds(100,210,275,30);
+			
+	        menuAppartOuMaison.setBounds(100,50,275,30);
+	        menuTypesBien.setBounds(100,90,275,30);
+	        surfaceBien.setBounds(100,130,275,30);
+	        nomResidence.setBounds(100,170,275,30);
+	        nombreChambres.setBounds(100,210,275,30);
 	        arrondissement.setBounds(100,250,275,30);
-	        ville.setBounds(100,290,275,30);
-	        numAppartement.setBounds(100,330,275,30);
-	        numEtage.setBounds(100,370,275,30);
+	        codePostal.setBounds(100,290,275,30);
+	        ville.setBounds(100,330,275,30);
+	        numRue.setBounds(100,370,275,30);	        
+	        menuTypesVoie.setBounds(100,410,275,30);
+	        nomRue.setBounds(100,450,275,30);
+	        menuTypesChauffage.setBounds(100,490,275,30);
+	        menuTerrasse.setBounds(100,530,275,30);
+	        surfaceTerrasse.setBounds(100,570,275,30);
+	        menuBalcon.setBounds(100,610,275,30);
+	        surfaceBalcon.setBounds(100,650,275,30);
 	        
-	        numRue.setBounds(100,410,275,30);
-	        menuTypesVoie.setBounds(100,450,275,30);
-	        nomRue.setBounds(100,490,275,30);
-	        nomResidence.setBounds(100,530,275,30);
-	        isChauffageIndividuel.setBounds(100,570,275,30);
-	        menuTypesChauffage.setBounds(100,610,275,30);
-	        
-	        menuJardin.setBounds(400,50,275,30);
-	        surfaceJardin.setBounds(400,90,275,30);
-	        menuMeuble.setBounds(400,130,275,30);
-	        menuTerrain.setBounds(400,170,275,30);
-	        surfaceTerrain.setBounds(400,210,275,30);
+	        menuMeuble.setBounds(400,50,275,30);
+	        descriptionMeubles.setBounds(400,90,275,30);
+	        anneeConstruction.setBounds(400,130,275,30);	        
+	        numAppartement.setBounds(400,170,275,30);
+	        numEtage.setBounds(400,210,275,30);
 	        menuEscalier.setBounds(400,250,275,30);
-	        menuCave.setBounds(400,290,275,30);
-	        menuSousSol.setBounds(400,330,275,30);
-	        menuCour.setBounds(400,370,275,30);
-	        surfaceCour.setBounds(400,410,275,30);
-	        menuBalcon.setBounds(400,450,275,30);
-	        surfaceBalcon.setBounds(400,490,275,30);
-	        menuTerrasse.setBounds(400,530,275,30);
-	        surfaceTerrasse.setBounds(400,570,275,30);
-	        descriptionMeubles.setBounds(400,610,275,30);
+	        menuChauffageIndividuel.setBounds(400,290,275,30);
+	        menuCave.setBounds(400,330,275,30);
+	        menuSousSol.setBounds(400,370,275,30);
+	        menuCour.setBounds(400,410,275,30);
+	        surfaceCour.setBounds(400,450,275,30);
+	        menuJardin.setBounds(400,490,275,30);
+	        surfaceJardin.setBounds(400,530,275,30);
+	        menuTerrain.setBounds(400,570,275,30);
+	        surfaceTerrain.setBounds(400,610,275,30);
+	        
 	        enregistrer.setBounds(100, 690, 275, 30);
+	        
+	        // Définir un rendu personnalisé pour le choix chauffage individuel ou non
+	        menuChauffageIndividuel.setRenderer(new DefaultListCellRenderer() {
+	            @Override
+	            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+	                JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+	                
+	                // Afficher le texte d'information en gras et en gris
+	                if (index == 0) {
+	                    label.setFont(label.getFont().deriveFont(Font.BOLD));
+	                    label.setForeground(Color.GRAY);
+	                }
+	                choixChauffageIndividuelOuNon = (String) value;
+	                return label;
+	            }
+	        });
+	
+	        // Ajout d'un écouteur d'événements pour détecter la sélection d'un élément
+	        menuChauffageIndividuel.addActionListener(new ActionListener() {
+	            @Override
+	            public void actionPerformed(ActionEvent e) {
+	                // Récupérer l'élément sélectionné et l'afficher
+	            	choixChauffageIndividuelOuNon = (String) menuChauffageIndividuel.getSelectedItem();
+	            }
+	        });
 	        
 	        // Définir un rendu personnalisé pour le menu déroulant pour le type de bien
 	        menuTypesBien.setRenderer(new DefaultListCellRenderer() {
@@ -208,7 +223,7 @@ public class AddProperty extends JFrame {
 	                    label.setFont(label.getFont().deriveFont(Font.BOLD));
 	                    label.setForeground(Color.GRAY);
 	                }
-	                
+	                String choixTypeBien = (String) value;
 	                return label;
 	            }
 	        });
@@ -563,8 +578,9 @@ public class AddProperty extends JFrame {
 	                choixAppartOuMaison = (String) menuAppartOuMaison.getSelectedItem();
 	                
 	                // Activer ou désactiver des champ de texte en fonction de la sélection dans le menu déroulant
-	                if (choixAppartOuMaison.equals("Maison Individuelle")) {
+	                if (choixAppartOuMaison.equals("Maison individuelle")) {
 	                    menuSousSol.setEnabled(true);
+	                    menuCave.setEnabled(true);
 	                    menuCour.setEnabled(true);
 	                    menuJardin.setEnabled(true);
 	                    menuTerrain.setEnabled(true);
@@ -574,9 +590,11 @@ public class AddProperty extends JFrame {
 	                    menuEscalier.setEnabled(false);
 	                    numEtage.setEnabled(false);
 	                    numAppartement.setEnabled(false);
+	                    menuChauffageIndividuel.setEnabled(false);
 	                } 
 	                if (choixAppartOuMaison.equals("Appartement")) {
 	                	menuSousSol.setEnabled(false);
+	                	menuCave.setEnabled(false);
 	                    menuCour.setEnabled(false);
 	                    menuJardin.setEnabled(false);
 	                    menuTerrain.setEnabled(false);
@@ -586,6 +604,7 @@ public class AddProperty extends JFrame {
 	                    menuEscalier.setEnabled(true);
 	                    numEtage.setEnabled(true);
 	                    numAppartement.setEnabled(true);
+	                    menuChauffageIndividuel.setEnabled(true);
 	                }
 	            }
 	        });
@@ -624,6 +643,44 @@ public class AddProperty extends JFrame {
 	                // Restaure le texte indicatif si le champ de texte est vide lorsqu'il perd le focus
 	                if (surfaceCour.getText().isEmpty()) {
 	                    surfaceCour.setText("Surface de la cour");
+	                }
+	            }
+	        });
+	        
+	        // Ajout d'un écouteur de focus au champ de texte de la surface du terrain
+	        surfaceTerrain.addFocusListener(new FocusListener() {
+	            @Override
+	            public void focusGained(FocusEvent e) {
+	                // Efface le texte indicatif lorsque le champ de texte obtient le focus
+	                if (surfaceTerrain.getText().equals("Surface du terrain")) {
+	                	surfaceTerrain.setText("");
+	                }
+	            }
+	
+	            @Override
+	            public void focusLost(FocusEvent e) {
+	                // Restaure le texte indicatif si le champ de texte est vide lorsqu'il perd le focus
+	                if (surfaceTerrain.getText().isEmpty()) {
+	                	surfaceTerrain.setText("Surface du terrain");
+	                }
+	            }
+	        });
+	        
+	        // Ajout d'un écouteur de focus au champ de texte de la surface du jardin
+	        surfaceJardin.addFocusListener(new FocusListener() {
+	            @Override
+	            public void focusGained(FocusEvent e) {
+	                // Efface le texte indicatif lorsque le champ de texte obtient le focus
+	                if (surfaceJardin.getText().equals("Surface du jardin")) {
+	                	surfaceJardin.setText("");
+	                }
+	            }
+	
+	            @Override
+	            public void focusLost(FocusEvent e) {
+	                // Restaure le texte indicatif si le champ de texte est vide lorsqu'il perd le focus
+	                if (surfaceJardin.getText().isEmpty()) {
+	                	surfaceJardin.setText("Surface du jardin");
 	                }
 	            }
 	        });
@@ -671,7 +728,7 @@ public class AddProperty extends JFrame {
 	            @Override
 	            public void focusGained(FocusEvent e) {
 	                // Efface le texte indicatif lorsque le champ de texte obtient le focus
-	                if (anneeConstruction.getText().equals("Annee de construction")) {
+	                if (anneeConstruction.getText().equals("Année de construction")) {
 	                	anneeConstruction.setText("");
 	                }
 	            }
@@ -680,7 +737,7 @@ public class AddProperty extends JFrame {
 	            public void focusLost(FocusEvent e) {
 	                // Restaure le texte indicatif si le champ de texte est vide lorsqu'il perd le focus
 	                if (anneeConstruction.getText().isEmpty()) {
-	                	anneeConstruction.setText("Annee de construction");
+	                	anneeConstruction.setText("Année de construction");
 	                }
 	            }
 	        });
@@ -856,13 +913,33 @@ public class AddProperty extends JFrame {
 	            }
 	        });
 	        
+	        // Ajout d'un écouteur de focus au champ de texte du code postal
+	        codePostal.addFocusListener(new FocusListener() {
+	            @Override
+	            public void focusGained(FocusEvent e) {
+	                // Efface le texte indicatif lorsque le champ de texte obtient le focus
+	                if (codePostal.getText().equals("Code postal")) {
+	                	codePostal.setText("");
+	                }
+	            }
+	
+	            @Override
+	            public void focusLost(FocusEvent e) {
+	                // Restaure le texte indicatif si le champ de texte est vide lorsqu'il perd le focus
+	                if (codePostal.getText().isEmpty()) {
+	                	codePostal.setText("Code postal");
+	                }
+	            }
+	        });
+	        
+	        container.add(codePostal);
 	        container.add(menuTypesChauffage);
 	        container.add(menuTypesBien);
 	        container.add(numRue);
 	        container.add(menuTypesVoie);
 	        container.add(nomRue);
 	        container.add(nomResidence);
-	        container.add(isChauffageIndividuel);
+	        container.add(menuChauffageIndividuel);
 	        container.add(menuJardin);
 	        container.add(surfaceJardin);
 	        container.add(menuMeuble);
@@ -891,44 +968,32 @@ public class AddProperty extends JFrame {
 	
 			this.setLocationRelativeTo(null);
 			this.setVisible(true);
-		
 			
 			enregistrer.addActionListener(new ActionListener() {
 			    public void actionPerformed(ActionEvent e) {
 			    	enregistrerButton = true;
-			    	/*
-			    	// String typeBienText = typeBien.getText();
-			    	String surfaceBienText = surfaceBien.getText();
-			    	// String isMaisonIndividuelleText = isMaisonIndividuelle.getText();
-			    	// String isAppartementText = isAppartement.getText();
-			    	String nombreChambreText = nombreChambres.getText();
-			    	String anneeConstructionText = anneeConstruction.getText();
-			    	String arrondissementText = arrondissement.getText();
-			    	String villeText = ville.getText();
-			    	String numAppartementText = numAppartement.getText();
-			    	String numEtageText = numEtage.getText();
-			    	String numRueText = numRue.getText();
-			    	// String typeRueText = typeRue.getText();
-			    	String nomRueText = nomRue.getText();
-			    	String nomResidenceText = nomResidence.getText();
-			    	String isChauffageIndividuelText = isChauffageIndividuel.getText();
-			    	// String typeChauffageText = typeChauffage.getText();
-			    	// String isJardinText = isJardin.getText();
-			    	String surfaceJardinText = surfaceJardin.getText();
-			    	// String isMeubleText = isMeuble.getText();
-			    	// String isTerrainText = isTerrain.getText();
-			    	String surfaceTerrainText = surfaceTerrain.getText();
-			    	// String isEscalierText = isEscalier.getText();
-			    	// String isCaveText = isCave.getText();
-			    	// String isSousSolText = isSousSol.getText();
-			    	// String isCourText = isCour.getText();
-			    	String surfaceCourText = surfaceCour.getText();
-			    	String isBalconText = isBalcon.getText();
-			    	String surfaceBalconText = surfaceBalcon.getText();
-			    	String isTerrasseText = isTerrasse.getText();
-			    	String descriptionMeubleText = descriptionMeubles.getText();
-			    	*/
-			    }
+			    	
+			    	if (choixAppartOuMaison == null || choixMeubleOuNon == null || choixEscalierOuNon == null || choixBalconOuNon == null || choixTerrasseOuNon == null)
+			    		JOptionPane.showMessageDialog(null, "Certaines informations sont manquantes. Veuillez reessayer !", "Erreur de remplissage", JOptionPane.ERROR_MESSAGE);
+			    	
+			    	else {
+			    	Bien bien = new Bien(0, defaultText(typeBienChoisi), convertTextToFloat(surfaceBien.getText(), "Surface du bien"),
+			    						 convertTextToInt(codePostal.getText(), "Code postal"), !isAppartement(), isAppartement(),
+			    						 convertTextToInt(nombreChambres.getText(), "Nombre de chambres"), convertTextToInt(anneeConstruction.getText(), "Année de construction"),
+			    						 convertTextToInt(arrondissement.getText(), "Arrondissement"), ville.getText(),
+			    						 convertTextToInt(numAppartement.getText(), "Numéro d'appartement"), convertTextToInt(numEtage.getText(), "Numéro d'étage"),
+			    						 convertTextToInt(numRue.getText(), "Numéro de la rue"), defaultText(typeVoieChoisi),
+			    						 nomRue.getText(), nomResidence.getText(), getChauffageIndividuel(),
+			    						 defaultText(typeChauffageChoisi), aJardin(), convertTextToFloat(surfaceJardin.getText(), "Surface du jardin"),
+			    						 estMeuble(), aTerrain(), convertTextToFloat(surfaceTerrain.getText(), "Surface du terrain"),
+			    						 aEscalier(), aCave(), aSousSol(), aCour(), convertTextToFloat(surfaceCour.getText(), "Surface de la cour"),
+			    						 aBalcon(), convertTextToFloat(surfaceBalcon.getText(), "Surface du balcon"), aTerrasse(),
+			    						 convertTextToFloat(surfaceTerrasse.getText(), "Surface de la terrasse"), descriptionMeubles.getText());			    	
+			    	BienDAO bienDAO= new BienDAO();			    	
+			    	bienDAO.addBien(bien);
+			    	}
+			    	
+			    	}
 			});
 	
 	}
@@ -1052,10 +1117,36 @@ public class AddProperty extends JFrame {
 	 * Permet de savoir si le bien a une cave
 	 */
 	public boolean aCave() {
-		if (choixCaveOuNon.equals("Oui"))
-			return true;
-		else
+		if (choixCaveOuNon == null)
 			return false;
+		else if (choixCaveOuNon.equals("Non"))
+			return false;
+		else
+			return true;
+	}
+	
+	/**
+	 * Permet de savoir si le bien a une cour
+	 */
+	public boolean aCour() {
+		if (choixCourOuNon == null)
+			return false;
+		if (choixCourOuNon.equals("Non"))
+			return false;
+		else
+			return true;
+	}
+	
+	/**
+	 * Permet de savoir si le bien a un sous-sol
+	 */
+	public boolean aSousSol() {
+		if (choixSousSolOuNon == null)
+			return false;
+		if (choixSousSolOuNon.equals("Non"))
+			return false;
+		else
+			return true;
 	}
 	
 	/**
@@ -1091,5 +1182,99 @@ public class AddProperty extends JFrame {
 	public String getSurfaceTerrasse() {
 		return surfaceTerrasse.getText();
 	}
+	
+	/**
+	 * Permet de savoir si le chauffage est individuel ou non
+	 */
+	public boolean getChauffageIndividuel() {
+		if (choixChauffageIndividuelOuNon.equals("Oui"))
+			return true;
+		else
+			return false;
+	}
+	
+	/**
+	 * Permet de savoir si le bien a un jardin
+	 */
+	public boolean aJardin() {
+		if (choixJardinOuNon == null)
+			return false;
+		else if (choixJardinOuNon.equals("Non"))
+			return false;
+		else
+			return true;
+	}
+	
+	/**
+	 * Permet de savoir si le bien a un escalier
+	 */
+	public boolean aEscalier() {
+		if (choixEscalierOuNon.equals("Oui"))
+			return true;
+		else
+			return false;
+	}
+	
+	/**
+	 * Permet de savoir si le bien a un terrain
+	 */
+	public boolean aTerrain() {
+		if (choixTerrainOuNon == null)
+			return false;
+		else if (choixTerrainOuNon.equals("Non"))
+			return false;
+		else
+			return true;
+	}
+	
+	/**
+	 * Permet de savoir si le bien est meublé
+	 */
+	public boolean estMeuble() {
+		if (choixMeubleOuNon.equals("Oui"))
+			return true;
+		else
+			return false;
+	}
+	
+	/**
+	 * Permet de convertir des réels de String à float
+	 * 
+	 * @param text : un réel en String
+	 * 
+	 * @return sa valeur en float
+	 */
+	public float convertTextToFloat(String text, String text1) {
+		if (text.equals(text1))
+			return 0;
+		else
+			return Float.parseFloat(text);
+	}
+	
+	/**
+	 * Permet de convertir des entiers de String à int
+	 * 
+	 * @param text : un entier en String
+	 * 
+	 * @return sa valeur en int
+	 */
+	public int convertTextToInt(String text, String text1) {
+		if (text.equals(text1))
+			return 0;
+		else
+			return Integer.parseInt(text);
+	}
+	
+	/**
+	 * Permet d'afficher un texte par défaut si certains champs ne sont pas remplis
+	 * 
+	 * @param text : un entier en String
+	 * 
+	 * @return le texte par défaut
+	 */
+	public String defaultText(String text) {
+		if (text == null || text.equals(""))
+			text = "Non renseigné";
+		return text;
+	}
 }
-
