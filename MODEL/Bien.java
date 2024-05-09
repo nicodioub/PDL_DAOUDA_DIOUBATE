@@ -220,13 +220,16 @@ public class Bien {
 	 * @param etage : valeur d'etage quelconque
 	 * @param numAppartement : valeur quelconque
 	 */
-	public Bien (String ville, int codePostal, int arrondissement, int numRue, String typeRue, String nomRue,
-			String type, String residence, float surface, int nombreChambres, String descriptionMeubles,
-			boolean meuble, boolean balcon, boolean terrasse, float surfaceTerrasse, float surfaceBalcon, 
-			int anneeConstruction, boolean escalier, int etage, boolean sous_sol, boolean cave, boolean cour, 
-            boolean jardin, boolean terrain, float surfaceCour, float surfaceJardin, float surfaceTerrain, 
-            String typeChauffage, boolean chauffageIndividuel, boolean appartement, boolean maisonIndividuelle, 
-            int numAppartement) {
+	public Bien (int idBien, String type, float surface, int codePostal, 
+			boolean maisonIndividuelle, boolean appartement, int nombreChambres, 
+			int anneeConstruction, int arrondissement, String ville, int numAppartement, 
+			int etage, int numRue, String typeRue, String nomRue, String residence, 
+			boolean chauffageIndividuel, String typeChauffage, boolean jardin, 
+			float surfaceJardin, boolean meuble, boolean terrain, float surfaceTerrain, 
+			boolean escalier, boolean cave, boolean sous_sol, boolean cour,  float surfaceCour, 
+			boolean balcon, float surfaceBalcon, boolean terrasse, float surfaceTerrasse, 
+			String descriptionMeubles) {
+			this.idBien = idBien;
 			this.ville = ville;
 			this.codePostal = codePostal;
 			this.arrondissement = arrondissement;
@@ -237,24 +240,49 @@ public class Bien {
 			this.residence = residence;
 			this.surface = surface;
 			this.nombreChambres = nombreChambres;
-			this.descriptionMeubles = descriptionMeubles;
+			
 			this.meuble = meuble;
+			if (meuble == false)
+				this.descriptionMeubles = "Non meublé";
+			else
+				this.descriptionMeubles = descriptionMeubles;
+			
 			this.balcon = balcon;
+			if (balcon == false)
+				this.surfaceBalcon = 0;
+			else
+				this.surfaceBalcon = surfaceBalcon;
+			
 			this.terrasse = terrasse;
-			this.surfaceTerrasse = surfaceTerrasse;
-			this.surfaceBalcon = surfaceBalcon;
+			if (terrasse == false)
+				this.surfaceTerrasse = 0;
+			else
+				this.surfaceTerrasse = surfaceTerrasse;
+			
 			this.anneeConstruction = anneeConstruction;
 			this.typeChauffage = typeChauffage;
 			
 			if (appartement == false && maisonIndividuelle == true) {
 				this.sous_sol = sous_sol;
 				this.cave = cave;
+				
 				this.cour = cour;
+				if (cour == false)
+					this.surfaceCour = 0;
+				else
+					this.surfaceCour = surfaceCour;
+				
 				this.jardin = jardin;
+				if (jardin == false)
+					this.surfaceJardin = 0;
+				else
+					this.surfaceJardin = surfaceJardin;
+				
 				this.terrain = terrain;
-				this.surfaceCour = surfaceCour;
-				this.surfaceJardin = surfaceJardin;
-				this.surfaceTerrain = surfaceTerrain;
+				if (terrain == false)
+					this.surfaceTerrain = 0;
+				else
+					this.surfaceTerrain = surfaceTerrain;
 			}
 			
 			if (appartement == true && maisonIndividuelle == false) {
