@@ -83,7 +83,7 @@ public class AddProperty extends JFrame {
     private JComboBox<String> menuAppartOuMaison = new JComboBox<>(choixMenuAppartOuMaison);
 
     // Création du menu de choix chauffage individuel
-   	String[] choixChauffageIndividuel = {"Chauffage Individuel", "Oui", "Non"};
+   	String[] choixChauffageIndividuel = {"Chauffage individuel", "Oui", "Non"};
     private JComboBox<String> menuChauffageIndividuel = new JComboBox<>(choixChauffageIndividuel);
     
     
@@ -198,7 +198,7 @@ public class AddProperty extends JFrame {
 	                    label.setFont(label.getFont().deriveFont(Font.BOLD));
 	                    label.setForeground(Color.GRAY);
 	                }
-	                choixChauffageIndividuelOuNon = (String) value;
+	                
 	                return label;
 	            }
 	        });
@@ -223,7 +223,7 @@ public class AddProperty extends JFrame {
 	                    label.setFont(label.getFont().deriveFont(Font.BOLD));
 	                    label.setForeground(Color.GRAY);
 	                }
-	                String choixTypeBien = (String) value;
+	                
 	                return label;
 	            }
 	        });
@@ -973,10 +973,141 @@ public class AddProperty extends JFrame {
 			    public void actionPerformed(ActionEvent e) {
 			    	enregistrerButton = true;
 			    	
-			    	if (choixAppartOuMaison == null || choixMeubleOuNon == null || choixEscalierOuNon == null || choixBalconOuNon == null || choixTerrasseOuNon == null)
-			    		JOptionPane.showMessageDialog(null, "Certaines informations sont manquantes. Veuillez reessayer !", "Erreur de remplissage", JOptionPane.ERROR_MESSAGE);
+			    	//if (choixAppartOuMaison == null || choixMeubleOuNon == null || choixEscalierOuNon == null || choixBalconOuNon == null || choixTerrasseOuNon == null)
+			    	//	JOptionPane.showMessageDialog(null, "Certaines informations sont manquantes. Veuillez reessayer !", "Erreur de remplissage", JOptionPane.ERROR_MESSAGE);
 			    	
-			    	else {
+			    	int test = 1; //Variable qui vérifie que tous les champs sont remplis
+			    	
+			    	if (choixAppartOuMaison == null) {
+			    		JOptionPane.showMessageDialog(null, "Vous n'avez pas sélectionné l'option 'Appartement/Maison individuelle' !", "Erreur de remplissage", JOptionPane.ERROR_MESSAGE);
+			    		test = 0;
+			    	}
+			    	else if (typeBienChoisi == null) {
+			    		JOptionPane.showMessageDialog(null, "Vous n'avez pas sélectionné l'option 'Type de bien' !", "Erreur de remplissage", JOptionPane.ERROR_MESSAGE);
+			    		test = 0;
+			    	}
+			    	else if (surfaceBien.getText().equals("Surface du bien")) {
+			    		JOptionPane.showMessageDialog(null, "Vous n'avez pas rempli le champ 'Surface du bien' !", "Erreur de remplissage", JOptionPane.ERROR_MESSAGE);
+			    		test = 0;
+			    	}
+			    	else if (nomResidence.getText().equals("Nom de la résidence")) {
+			    		JOptionPane.showMessageDialog(null, "Vous n'avez pas rempli le champ 'Nom de la résidence' !", "Erreur de remplissage", JOptionPane.ERROR_MESSAGE);
+			    		test = 0;
+			    	}
+			    	else if (nombreChambres.getText().equals("Nombre de chambres")) {
+			    		JOptionPane.showMessageDialog(null, "Vous n'avez pas rempli le champ 'Nombre de chambres' !", "Erreur de remplissage", JOptionPane.ERROR_MESSAGE);
+			    		test = 0;
+			    	}
+			    	else if (arrondissement.getText().equals("Arrondissement")) {
+			    		JOptionPane.showMessageDialog(null, "Vous n'avez pas rempli le champ 'Arrondissement' !", "Erreur de remplissage", JOptionPane.ERROR_MESSAGE);
+			    		test = 0;
+			    	}
+			    	else if (codePostal.getText().equals("Code postal")) {
+			    		JOptionPane.showMessageDialog(null, "Vous n'avez pas rempli le champ 'Code postal' !", "Erreur de remplissage", JOptionPane.ERROR_MESSAGE);
+			    		test = 0;
+			    	}
+			    	else if (ville.getText().equals("Ville")) {
+			    		JOptionPane.showMessageDialog(null, "Vous n'avez pas rempli le champ 'Ville' !", "Erreur de remplissage", JOptionPane.ERROR_MESSAGE);
+			    		test = 0;
+			    	}
+			    	else if (numRue.getText().equals("Numéro de la rue")) {
+			    		JOptionPane.showMessageDialog(null, "Vous n'avez pas rempli le champ 'Numéro de la rue' !", "Erreur de remplissage", JOptionPane.ERROR_MESSAGE);
+			    		test = 0;
+			    	}
+			    	else if (typeVoieChoisi == null) {
+			    		JOptionPane.showMessageDialog(null, "Vous n'avez pas sélectionné l'option 'Type de voie' !", "Erreur de remplissage", JOptionPane.ERROR_MESSAGE);
+			    		test = 0;
+			    	}
+			    	else if (nomRue.getText().equals("Nom de la rue")) {
+			    		JOptionPane.showMessageDialog(null, "Vous n'avez pas rempli le champ 'Nom de la rue' !", "Erreur de remplissage", JOptionPane.ERROR_MESSAGE);
+			    		test = 0;
+			    	}
+			    	else if (typeChauffageChoisi == null) {
+			    		JOptionPane.showMessageDialog(null, "Vous n'avez pas sélectionné l'option 'Type de chauffage' !", "Erreur de remplissage", JOptionPane.ERROR_MESSAGE);
+			    		test = 0;
+			    	}
+			    	else if (choixTerrasseOuNon == null) {
+			    		JOptionPane.showMessageDialog(null, "Vous n'avez pas sélectionné l'option 'Présence de terrasse' !", "Erreur de remplissage", JOptionPane.ERROR_MESSAGE);
+			    		test = 0;
+			    	}
+			    	else if (choixTerrasseOuNon.equals("Oui") && surfaceTerrasse.getText().equals("Surface de la terrasse")) {
+		    			JOptionPane.showMessageDialog(null, "Vous n'avez pas rempli le champ 'Surface de la terrasse' !", "Erreur de remplissage", JOptionPane.ERROR_MESSAGE);
+		    			test = 0;
+			    	}
+			    	else if (choixBalconOuNon == null) {
+			    		JOptionPane.showMessageDialog(null, "Vous n'avez pas sélectionné l'option 'Présence de balcon' !", "Erreur de remplissage", JOptionPane.ERROR_MESSAGE);
+			    		test = 0;
+			    	}
+			    	else if (choixBalconOuNon.equals("Oui") && surfaceBalcon.getText().equals("Surface du balcon")) {
+			    		JOptionPane.showMessageDialog(null, "Vous n'avez pas rempli le champ 'Surface du balcon' !", "Erreur de remplissage", JOptionPane.ERROR_MESSAGE);
+			    		test = 0;
+			    	}
+			    	else if (choixMeubleOuNon == null) {
+			    		JOptionPane.showMessageDialog(null, "Vous n'avez pas sélectionné l'option 'Indicateur meublé ou non' !", "Erreur de remplissage", JOptionPane.ERROR_MESSAGE);
+			    		test = 0;
+			    	}
+			    	else if (choixMeubleOuNon.equals("Oui") && descriptionMeubles.getText().equals("Description des meubles")) {
+			    		JOptionPane.showMessageDialog(null, "Vous n'avez pas rempli le champ 'Description des meubles' !", "Erreur de remplissage", JOptionPane.ERROR_MESSAGE);
+			    		test = 0;
+			    	}
+			    	else if (anneeConstruction.getText().equals("Année de construction")) {
+			    		JOptionPane.showMessageDialog(null, "Vous n'avez pas rempli le champ 'Année de construction' !", "Erreur de remplissage", JOptionPane.ERROR_MESSAGE);
+			    		test = 0;
+			    	}
+			    	else if (choixAppartOuMaison.equals("Appartement")) {
+			    		if (numAppartement.getText().equals("Numéro d'appartement")) {
+				    		JOptionPane.showMessageDialog(null, "Vous n'avez pas rempli le champ 'Numéro d'appartement' !", "Erreur de remplissage", JOptionPane.ERROR_MESSAGE);
+				    		test = 0;
+			    		}
+			    		else if (numEtage.getText().equals("Numéro d'étage")) {
+				    		JOptionPane.showMessageDialog(null, "Vous n'avez pas rempli le champ 'Numéro d'étage' !", "Erreur de remplissage", JOptionPane.ERROR_MESSAGE);
+				    		test = 0;
+			    		}
+			    		else if (choixEscalierOuNon == null) {
+				    		JOptionPane.showMessageDialog(null, "Vous n'avez pas sélectionné l'option 'Présence d'escalier' !", "Erreur de remplissage", JOptionPane.ERROR_MESSAGE);
+				    		test = 0;
+			    		}
+			    		else if (choixChauffageIndividuelOuNon == null) {
+				    		JOptionPane.showMessageDialog(null, "Vous n'avez pas sélectionné l'option 'Chauffage individuel' !", "Erreur de remplissage", JOptionPane.ERROR_MESSAGE);
+				    		test = 0;
+			    		}
+			    	}
+			    	else if (choixAppartOuMaison.equals("Maison individuelle")) {
+			    		if (choixCaveOuNon == null) {
+				    		JOptionPane.showMessageDialog(null, "Vous n'avez pas sélectionné l'option 'Présence de cave' !", "Erreur de remplissage", JOptionPane.ERROR_MESSAGE);
+				    		test = 0;
+			    		}
+			    		else if (choixSousSolOuNon == null) {
+				    		JOptionPane.showMessageDialog(null, "Vous n'avez pas sélectionné l'option 'Présence de sous-sol' !", "Erreur de remplissage", JOptionPane.ERROR_MESSAGE);
+				    		test = 0;
+			    		}
+			    		else if (choixCourOuNon == null) {
+				    		JOptionPane.showMessageDialog(null, "Vous n'avez pas sélectionné l'option 'Présence de cour' !", "Erreur de remplissage", JOptionPane.ERROR_MESSAGE);
+				    		test = 0;
+			    		}
+				    	else if (choixCourOuNon.equals("Oui") && surfaceCour.getText().equals("Surface de la cour")) {
+			    			JOptionPane.showMessageDialog(null, "Vous n'avez pas rempli le champ 'Surface de la cour' !", "Erreur de remplissage", JOptionPane.ERROR_MESSAGE);
+			    			test = 0;
+				    	}
+				    	else if (choixJardinOuNon == null) {
+				    		JOptionPane.showMessageDialog(null, "Vous n'avez pas sélectionné l'option 'Présence de jardin' !", "Erreur de remplissage", JOptionPane.ERROR_MESSAGE);
+				    		test = 0;
+				    	}
+				    	else if (choixJardinOuNon.equals("Oui") && surfaceJardin.getText().equals("Surface du jardin")) {
+			    			JOptionPane.showMessageDialog(null, "Vous n'avez pas rempli le champ 'Surface du jardin' !", "Erreur de remplissage", JOptionPane.ERROR_MESSAGE);
+			    			test = 0;
+				    	}
+				    	else if (choixTerrainOuNon == null) {
+				    		JOptionPane.showMessageDialog(null, "Vous n'avez pas sélectionné l'option 'Présence de terrain' !", "Erreur de remplissage", JOptionPane.ERROR_MESSAGE);
+				    		test = 0;
+				    	}
+				    	else if (choixTerrainOuNon.equals("Oui") && surfaceTerrain.getText().equals("Surface du terrain")) {
+			    			JOptionPane.showMessageDialog(null, "Vous n'avez pas rempli le champ 'Surface du terrain' !", "Erreur de remplissage", JOptionPane.ERROR_MESSAGE);
+			    			test = 0;
+				    	}
+			    	}
+			    	
+			    	if (test == 1) {
 			    	Bien bien = new Bien(0, defaultText(typeBienChoisi), convertTextToFloat(surfaceBien.getText(), "Surface du bien"),
 			    						 convertTextToInt(codePostal.getText(), "Code postal"), !isAppartement(), isAppartement(),
 			    						 convertTextToInt(nombreChambres.getText(), "Nombre de chambres"), convertTextToInt(anneeConstruction.getText(), "Année de construction"),
@@ -1107,8 +1238,10 @@ public class AddProperty extends JFrame {
 	 * Permet de savoir si le bien est meuble ou pas
 	 */
 	public boolean isMeuble() {
-		if (choixMeubleOuNon.equals("Oui"))
-			return true;
+		if (choixMeubleOuNon == null)
+			return false;
+		else if (choixMeubleOuNon.equals("Non"))
+			return false;
 		else
 			return false;
 	}
@@ -1153,20 +1286,24 @@ public class AddProperty extends JFrame {
 	 * Permet de savoir si le bien a un balcon
 	 */
 	public boolean aBalcon() {
-		if (choixBalconOuNon.equals("Oui"))
-			return true;
-		else
+		if (choixBalconOuNon == null)
 			return false;
+		if (choixBalconOuNon.equals("Non"))
+			return false;
+		else
+			return true;
 	}
 	
 	/**
 	 * Permet de savoir si le bien a une terrasse
 	 */
 	public boolean aTerrasse() {
-		if (choixTerrasseOuNon.equals("Oui"))
-			return true;
-		else
+		if (choixTerrasseOuNon == null)
 			return false;
+		else if (choixTerrasseOuNon.equals("Non"))
+			return false;
+		else
+			return true;
 	}
 	
 	/**
@@ -1187,10 +1324,12 @@ public class AddProperty extends JFrame {
 	 * Permet de savoir si le chauffage est individuel ou non
 	 */
 	public boolean getChauffageIndividuel() {
-		if (choixChauffageIndividuelOuNon.equals("Oui"))
-			return true;
-		else
+		if (choixChauffageIndividuelOuNon == null)
 			return false;
+		else if (choixChauffageIndividuelOuNon.equals("Non"))
+			return false;
+		else
+			return true;
 	}
 	
 	/**
@@ -1209,10 +1348,12 @@ public class AddProperty extends JFrame {
 	 * Permet de savoir si le bien a un escalier
 	 */
 	public boolean aEscalier() {
-		if (choixEscalierOuNon.equals("Oui"))
-			return true;
-		else
+		if (choixEscalierOuNon == null)
 			return false;
+		else if (choixEscalierOuNon.equals("Non"))
+			return false;
+		else
+			return true;
 	}
 	
 	/**
@@ -1231,10 +1372,12 @@ public class AddProperty extends JFrame {
 	 * Permet de savoir si le bien est meublé
 	 */
 	public boolean estMeuble() {
-		if (choixMeubleOuNon.equals("Oui"))
-			return true;
-		else
+		if (choixMeubleOuNon == null)
 			return false;
+		else if (choixMeubleOuNon.equals("Non"))
+			return false;
+		else
+			return true;
 	}
 	
 	/**
