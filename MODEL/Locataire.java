@@ -1,64 +1,111 @@
 package model;
 /**
- * Classe representant un Locataire (extension de personne)
+ * Classe representant un Locataire
  * 
  * @author DAOUDA Ilyas + DIOUBATE Nicolas
  * @version 1.0
  */
-public class Locataire extends Personne{
+public class Locataire {
 
 	/**
 	 * Permet de savoir si le locataire est une societe ou non
 	 */
 	private boolean societe;
 	
+	/*
+	 * Id du locataire
+	 */
+	private int idLocataire; 
+	
 	/**
 	 * Raison sociale d'un locataire (si c'est une entreprise)
 	 */
 	private String raisonSociale;
 	
-	/**
-	 * Bail auquel le locataire est associe
+	/*
+	 * Adresse d'un locataire (si c'est une entreprise)
 	 */
-	private Bail bail;
+	private String adresse;
 	
 	/**
 	 * Bien immobilier auquel le locataire est associé
+	 */	
+	private int idBien;
+	
+	/**
+	 * Nom d'un locataire
 	 */
-	private Bien bienImmobilier;
+	private String nomLocataire;
+	
+	/**
+	 * Prénom d'un locataire
+	 */
+	private String prenomLocataire;
+	
+	/*
+	 * Numéro d'un locataire
+	 */
+	private String numeroLocataire;
+	
+	/*
+	 * Email d'un locataire
+	 */
+	private String emailLocataire;
 	
 	/**
 	 * Constructeur de la classe Bailleur
 	 * 
-	 * @param unNom : nom quelconque
-	 * @param unPrenom : prenom quelconque
-	 * @param unEmail : email quelconque
-	 * @param unNumero : numero quelconque
+	 * @param idLocataaire : id du Locataire
+	 * @param nomLocataire : nom quelconque
+	 * @param prenomLocataire : prenom quelconque
+	 * @param emailLocataire : email quelconque
+	 * @param numeroLocataire : numero quelconque
 	 * @param societe : valeur true si le locataire est une societe 
 	 * @param raisonSociale : raison sociale quelconque
-	 * @param bail : un bail
-	 * @param bienImmobilier : un bien immobilier
+	 * @param idBien : un bien immobilier auquel est rattaché le locataire
 	 */
-	public Locataire (String unNom, String unPrenom, String unEmail, String unNumero, boolean societe, String raisonSociale,
-			Bail bail, Bien bienImmobilier)
+	public Locataire (int idLocataire, String nomLocataire, String prenomLocataire, String adresse, 
+					  String emailLocataire, String numeroLocataire, boolean societe, String raisonSociale, 
+					  int idBien)
 	{
-		super(unNom, unPrenom, unEmail, unNumero);
+		this.idLocataire = idLocataire;
+		this.nomLocataire = nomLocataire;
+		this.prenomLocataire = prenomLocataire;
+		this.emailLocataire = emailLocataire;
+		this.numeroLocataire = numeroLocataire;
 		this.societe = societe;
 		this.raisonSociale = raisonSociale;
-		this.bail = bail;
-		this.bienImmobilier = bienImmobilier;
+		this.idBien  = idBien;
+		this.adresse = adresse ; 
 	}
 	
 	
 	/**
+	 * getter de l'attribut idLocataire
+	 * 
+	 * @return : l'attribut idLocataire
+	 */
+	public int getIdLocataire() {
+		return idLocataire;
+	}
+	
+	/**
+	 * getter de l'attribut idBien
+	 * 
+	 * @return : l'attribut idBien
+	 */
+	public int getIdBien() {
+		return idBien;
+	}
+		
+	/**
 	 * getter de l'attribut societe
 	 * 
-	 * @return l'attribut societe
+	 * @return : l'attribut societe
 	 */
-	public boolean isSociete() {
+	public boolean getSociete() {
 		return societe;
 	}
-
 
 	/**
 	 * getter de l'attribut raisonSociale
@@ -68,7 +115,64 @@ public class Locataire extends Personne{
 	public String getRaisonSociale() {
 		return raisonSociale;
 	}
-
+	
+	/**
+	 * getter de l'attribut adresse
+	 * 
+	 * @return l'attribut adresse
+	 */
+	public String getAdresse() {
+		return adresse;
+	}
+	
+	/**
+	 * getter de l'attribut nomLocataire
+	 * 
+	 * @return l'attribut nomLocataire
+	 */
+	public String getNomLocataire() {
+		return nomLocataire;
+	}
+	
+	/**
+	 * getter de l'attribut prenomLocataire
+	 * 
+	 * @return l'attribut prenomLocataire
+	 */
+	public String getPrenomLocataire() {
+		return prenomLocataire;
+	}
+	
+	/**
+	 * getter de l'attribut numeroLocataire
+	 * 
+	 * @return l'attribut numeroLocataire
+	 */
+	public String getNumeroLocataire() {
+		return numeroLocataire;
+	}
+	
+	/**
+	 * getter de l'attribut emailLocataire
+	 * 
+	 * @return l'attribut emailLocataire
+	 */
+	public String getEmailLocataire() {
+		return emailLocataire;
+	}
+	
+	
+	
+	
+	
+	
+	public void setAdresse(String adresse2) {
+		adresse = adresse2;
+	}
+	
+	public void setIdLocataire(int idLocataire) {
+		this.idLocataire = idLocataire;
+	}
 
 	/**
 	 * setter de l'attribut raisonSociale
@@ -79,10 +183,11 @@ public class Locataire extends Personne{
 		this.raisonSociale = raisonSociale;
 	}
 	
+
 	/**
 	 * affiche les informations sur un locataire (personne)
 	 */
-	@Override
+	/*
 	public void display() {
 		super.display();
 		System.out.print("\nSociete : ");
@@ -93,4 +198,5 @@ public class Locataire extends Personne{
 		else
 			System.out.print("Non");
 	}
+	*/
 }
