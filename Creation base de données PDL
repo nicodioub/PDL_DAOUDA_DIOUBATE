@@ -1,21 +1,25 @@
+DROP TABLE BAIL_LOCATAIRE;
+DROP TABLE BAIL;
+DROP TABLE LOCATAIRE;
+DROP TABLE BAILLEUR;
+DROP TABLE BIEN;
+DROP TABLE GARANT;
+DROP TABLE EMPLOYE;
+
+
 CREATE TABLE GARANT (
     idGarant INT PRIMARY KEY, 
     nomGarant VARCHAR(150), 
     prenomGarant VARCHAR(150), 
     adresse VARCHAR(150)
 );
-CREATE SEQUENCE garant_seq
-  START WITH     1
-  INCREMENT BY   1
-  NOCACHE
-  NOCYCLE;
 
 CREATE TABLE BIEN (
     idBien NUMBER(10,0), 
     typeBien VARCHAR2(100), 
     surfaceBien NUMBER,
-    codePostal NUMBER,
     isMaisonIndividuelle NUMBER(1),
+    CodePostal NUMBER,
     isAppartement NUMBER(1),
     nombreChambre NUMBER, 
     anneeConstruction NUMBER,
@@ -47,11 +51,6 @@ CREATE TABLE BIEN (
     
     CONSTRAINT PK_BIEN PRIMARY KEY(idBien)  
 );
-CREATE SEQUENCE bien_seq
-  START WITH     1
-  INCREMENT BY   1
-  NOCACHE
-  NOCYCLE;
 
 CREATE TABLE BAILLEUR (
     idBailleur INT PRIMARY KEY, 
@@ -61,11 +60,6 @@ CREATE TABLE BAILLEUR (
     email VARCHAR(150), 
     telephone VARCHAR(20)
 );
-CREATE SEQUENCE bailleur_seq
-  START WITH     1
-  INCREMENT BY   1
-  NOCACHE
-  NOCYCLE;
 
 CREATE TABLE LOCATAIRE (
     idLocataire INT PRIMARY KEY, 
@@ -74,17 +68,11 @@ CREATE TABLE LOCATAIRE (
     adresse VARCHAR2(150), 
     email VARCHAR2(250), 
     telephone VARCHAR2(20),
-    societe VARCHAR2(100),
+    societe NUMBER(1),
     raisonSociale VARCHAR2(100),
-    idBail NUMBER,
     idBien NUMBER,
     CONSTRAINT FK_LOCATAIRE_BIEN FOREIGN KEY(idBien) REFERENCES BIEN(idBien)
 );
-CREATE SEQUENCE locataire_seq
-  START WITH     1
-  INCREMENT BY   1
-  NOCACHE
-  NOCYCLE;
 
 
 CREATE TABLE BAIL (
@@ -108,11 +96,6 @@ CREATE TABLE BAIL (
     CONSTRAINT FK_BAIL_BAILLEUR FOREIGN KEY(idBailleur) REFERENCES BAILLEUR(idBailleur),
     CONSTRAINT FK_BAIL_GARANT FOREIGN KEY(idGarant) REFERENCES GARANT(idGarant)
 );
-CREATE SEQUENCE bail_seq
-  START WITH     1
-  INCREMENT BY   1
-  NOCACHE
-  NOCYCLE;
 
 
 CREATE TABLE BAIL_LOCATAIRE(
@@ -127,11 +110,16 @@ CREATE TABLE EMPLOYE(
     login VARCHAR2(50),
     password VARCHAR2(50)
 );
-CREATE SEQUENCE employe_seq
-  START WITH     1
-  INCREMENT BY   1
-  NOCACHE
-  NOCYCLE;
 
 
 INSERT INTO EMPLOYE (idEmploye, login, password) VALUES (1, 'username', 'password');
+
+INSERT INTO BIEN (idBien, typeBien, surfaceBien, isMaisonIndividuelle, isAppartement, nombreChambre, anneeConstruction, arrondissement, ville, numAppartement, numEtage, numRue, typeRue, nomRue,
+nomResidence, isChauffageIndividuel, typeChauffage, isJardin, surfaceJardin, isMeuble, isTerrain, surfaceTerrain, isEscalier, isCave, isSousSol, isCour, surfaceCour, isBalcon, surfaceBalcon, isTerrasse, surfaceTerasse, descriptionMeuble) 
+VALUES (1, 'Maison', 150, 1, 0, 4, 2005, 15, 'Paris', NULL, NULL, 10, 'Rue', 'Example Street', 'Example Residence', 1, 'Gaz', 1, 300, 0, 0, NULL, 0, 0, 1,1, 100, 0, NULL, 0,NULL, 'Meublé');
+
+INSERT INTO BIEN (idBien, typeBien, surfaceBien, isMaisonIndividuelle, isAppartement, nombreChambre, anneeConstruction, arrondissement, ville, numAppartement, numEtage, numRue, typeRue, nomRue, nomResidence, isChauffageIndividuel, typeChauffage, isJardin, surfaceJardin, isMeuble, isTerrain, surfaceTerrain, isEscalier, isCave, isSousSol, isCour, surfaceCour, isBalcon, surfaceBalcon, isTerrasse, surfaceTerasse, descriptionMeuble) 
+VALUES (2, 'Appartement', 80, 0, 1, 2, 1990, 6, 'Marseille', 12, 2, 5, 'Avenue', 'Sample Avenue', 'Sample Residence', 0, 'Electrique', 0, NULL, 0, 0, NULL, 1, 0, 0, 0, NULL, 1, 15.5, 0, NULL, 'Non meublé');
+
+INSERT INTO EMPLOYE(idEmploye, login, password)
+VALUES (2,a,a);
