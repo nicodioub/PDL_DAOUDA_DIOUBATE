@@ -1,0 +1,132 @@
+package gui;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+public class MainInterfaceBailleur extends JFrame {
+	
+	private JPanel jlBackground;
+	private JLabel jlColor;
+	private JButton ajoutBailleur;
+	private JButton Bien;
+	private JButton Locataire;
+	private JButton Bail;
+
+	private Container container;
+
+	private AddProperty window;
+	
+	private boolean addPropertyButton = false;
+
+
+	public MainInterfaceBailleur(String title, int width, int height  ) {
+		
+		this.setTitle(title);
+		this.setSize(width, height);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		int buttonWidth = 100; // Largeur du JButton
+        int buttonHeight = 30; // Hauteur du JButton
+        
+        
+
+		jlBackground = new JPanel();
+		this.setContentPane(jlBackground);
+		Bien = new JButton("Bien");
+		Locataire = new JButton("Locataire");
+		ajoutBailleur = new JButton("+ Ajouter un bail ");
+		Bail = new JButton("Bail");
+		container = this.getContentPane();
+		
+		String[] columnNames = {"id Bailleur ", "Nom ","Prénom","email", "telephone"}; // a changer pour a
+		
+		Object[][] data = {
+				
+		};
+		JTable table = new JTable(data, columnNames);
+		
+	    //table.setBackground(Color.BLACK); // Change to desired color
+
+		
+		JScrollPane scrollPane = new JScrollPane(table);
+        
+		 //scrollPane.getViewport().setBackground(Color.BLACK); // Change to desired color
+
+	        
+		container.setLayout(null); // Définir le layout sur null pour permettre le positionnement absolu
+        
+		scrollPane.setBounds(0, 100, 1400, 600); // Adjust bounds as needed
+        ajoutBailleur.setBounds(1200, 50, 150, buttonHeight);
+	    Bien.setBounds(500,50  , 100, 30);
+	    Locataire.setBounds(600,50,100,30);
+	    Bail.setBounds(700,50,100,30);
+	    
+        container.add(ajoutBailleur);
+        container.add(Bien);
+        container.add(Locataire);
+        container.add(Bail);
+        container.add(scrollPane);
+		jlBackground.setBackground(Color.BLACK);
+
+		this.setLocationRelativeTo(null);
+		this.setVisible(true);
+		
+		ajoutBailleur.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		    	addPropertyButton = true;
+		    	AjoutBailleur Window3 = new AjoutBailleur("Logiciel de gestion DD",1400,800);		
+		        dispose(); // Ferme l'interface 2
+		        
+		        
+		        
+		    }
+		});
+		
+		Bail.addActionListener(new ActionListener() {
+			 public void actionPerformed(ActionEvent e) {
+			    	addPropertyButton = true;
+			    	MainInterfaceBail Window7 = new MainInterfaceBail("Logiciel de gestion DD", 1400,800);
+			    	Window7.setVisible(true);
+			        dispose(); // Ferme l'interface 2
+			    }
+			
+		});
+		
+		Locataire.addActionListener(new ActionListener() {
+			 public void actionPerformed(ActionEvent e) {
+			    	addPropertyButton = true;
+			    	MainInterfaceLocataire Window6 = new MainInterfaceLocataire("Logiciel de gestion DD", 1400,800);
+			    	Window6.setVisible(true);
+			        dispose(); // Ferme l'interface 2
+			    }
+			
+		});
+		
+		Bien.addActionListener(new ActionListener() {
+			 public void actionPerformed(ActionEvent e) {
+			    	addPropertyButton = true;
+			    	MainInterface Window1 = new MainInterface("Logiciel de gestion DD", 1400,800);
+			    	Window1.setVisible(true);
+			        dispose(); // Ferme l'interface 2
+			    }
+			
+		});
+		
+		
+		}
+	
+	
+	/**
+	 * Permet de verifier si l'utilisateur a clique sur 'Ajouter bail'
+	 * 
+	 * @return l'attribut addPropertyButton
+	 */
+	public boolean addPropertyClicked() {
+		return addPropertyButton;
+	}
+	
+	
+
+}
