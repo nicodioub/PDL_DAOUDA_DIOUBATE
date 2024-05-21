@@ -1,5 +1,3 @@
-// Faire le DAO de Bailleur avant de pouvoir continuer ca 
-
 package gui;
 
 import javax.swing.*;
@@ -31,17 +29,8 @@ public class AjoutBailleur extends JFrame {
     // Zone de texte pour le numéro du Bailleur
     private JTextField numeroBailleur = new JTextField("Numéro du Bailleur");
     
-    // Zone de texte pour la raison sociale du Bailleur
-    private JTextField raisonSociale = new JTextField("Raison sociale");
-    
     // Zone de texte pour l'id du Bien associé au Bailleur
     private JTextField idBien = new JTextField("Id du bien");
-	   
-	    
-    // Création du menu pour indiquer si le bien est une société ou pas
-   	String[] choixMenuSociete = {"Société", "Oui", "Non"};
-   	private String choixSocieteOuNon;
-    private JComboBox<String> menuSociete = new JComboBox<>(choixMenuSociete);
     
     
 
@@ -64,45 +53,10 @@ public class AjoutBailleur extends JFrame {
 	    adresse.setBounds(100,170,150,30);
 	    emailBailleur.setBounds(100,210,150,30);
 	    numeroBailleur.setBounds(100,250,150,30);
-	    menuSociete.setBounds(100,290,150,30);
-	    raisonSociale.setBounds(100,330,150,30);
 	    idBien.setBounds(100,410,150,30);
 	
 	    enregistrer.setBounds(300, 650, 150, 30);
-	    
-	    
-	    // Définir un rendu personnalisé pour le menu déroulant pour l'indicateur societe
-	    menuSociete.setRenderer(new DefaultListCellRenderer() {
-	        @Override
-	        public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-	            JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-	            
-	            // Afficher le texte d'information en gras et en gris
-	            if (index == 0) {
-	                label.setFont(label.getFont().deriveFont(Font.BOLD));
-	                label.setForeground(Color.GRAY);
-	            }
-	            
-	            return label;
-	        }
-	    });
-	
-	    // Ajout d'un écouteur d'événements pour détecter la sélection d'un élément
-	    menuSociete.addActionListener(new ActionListener() {
-	        @Override
-	        public void actionPerformed(ActionEvent e) {
-	            // Récupérer l'élément sélectionné et l'afficher
-	            choixSocieteOuNon = (String) menuSociete.getSelectedItem();
-	            
-	            // Activer ou désactiver le champ de texte en fonction de la sélection dans le menu déroulant
-	            if (choixSocieteOuNon.equals("Oui")) {
-	                raisonSociale.setEnabled(true);
-	            } else {
-	            	raisonSociale.setEnabled(false);
-	            }
-	        }
-	    });
-	    
+	      
 	    
 	    // Ajout d'un écouteur de focus au champ de texte du nom du Bailleur
 	    nomBailleur.addFocusListener(new FocusListener() {
@@ -157,25 +111,6 @@ public class AjoutBailleur extends JFrame {
 	            // Restaure le texte indicatif si le champ de texte est vide lorsqu'il perd le focus
 	            if (numeroBailleur.getText().isEmpty()) {
 	            	numeroBailleur.setText("Numéro du Bailleur");
-	            }
-	        }
-	    });
-	    
-	    // Ajout d'un écouteur de focus au champ de texte de la raison sociale
-	    raisonSociale.addFocusListener(new FocusListener() {
-	        @Override
-	        public void focusGained(FocusEvent e) {
-	            // Efface le texte indicatif lorsque le champ de texte obtient le focus
-	            if (raisonSociale.getText().equals("Raison sociale")) {
-	            	raisonSociale.setText("");
-	            }
-	        }
-	
-	        @Override
-	        public void focusLost(FocusEvent e) {
-	            // Restaure le texte indicatif si le champ de texte est vide lorsqu'il perd le focus
-	            if (raisonSociale.getText().isEmpty()) {
-	            	raisonSociale.setText("Raison sociale");
 	            }
 	        }
 	    });
@@ -243,8 +178,6 @@ public class AjoutBailleur extends JFrame {
 	    container.add(adresse);
 	    container.add(emailBailleur);
 	    container.add(numeroBailleur);
-	    //container.add(menuSociete);
-	   // container.add(raisonSociale);
 	    container.add(idBien);
 	    container.add(enregistrer);
 	    jlBackground.setBackground(Color.BLACK);
@@ -279,14 +212,6 @@ public class AjoutBailleur extends JFrame {
 		    		JOptionPane.showMessageDialog(null, "Vous n'avez pas rempli le champ 'Numéro du Bailleur' !", "Erreur de remplissage", JOptionPane.ERROR_MESSAGE);
 		    		test = 0;
 		    	}
-		    	else if (choixSocieteOuNon == null) {
-		    		JOptionPane.showMessageDialog(null, "Vous n'avez pas sélectionné l'option 'Société' !", "Erreur de remplissage", JOptionPane.ERROR_MESSAGE);
-		    		test = 0;
-		    	}
-		    	else if (choixSocieteOuNon.equals("Oui") && raisonSociale.getText().equals("Raison sociale")) {
-		    		JOptionPane.showMessageDialog(null, "Vous n'avez pas rempli le champ 'Raison sociale' !", "Erreur de remplissage", JOptionPane.ERROR_MESSAGE);
-		    		test = 0;
-		    	}
 		    	else if (idBien.getText().equals("Id du bien")) {
 		    		JOptionPane.showMessageDialog(null, "Vous n'avez pas rempli le champ 'Id du bien' !", "Erreur de remplissage", JOptionPane.ERROR_MESSAGE);
 		    		test = 0;
@@ -312,42 +237,30 @@ public class AjoutBailleur extends JFrame {
 	}
 	
 	/**
-	 * Permet de savoir si le bien est une société ou pas
-	 */
-	public boolean isSociete() {
-		if (choixSocieteOuNon == null)
-			return false;
-		else if (choixSocieteOuNon.equals("Non"))
-			return false;
-		else
-			return false;
-	}
-	
-	/**
 	 * Permet de recuperer le nom du Bailleur
 	 */
-	public String getnomBailleur() {
+	public String getNomBailleur() {
 		return nomBailleur.getText();
 	}
 	
 	/**
 	 * Permet de recuperer le prénom du Bailleur
 	 */
-	public String getPrénomBailleur() {
+	public String getPrenomBailleur() {
 		return prenomBailleur.getText();
 	}
 	
 	/**
 	 * Permet de recuperer le numero du Bailleur
 	 */
-	public String getnumeroBailleur() {
+	public String getNumeroBailleur() {
 		return numeroBailleur.getText();
 	}
 	
 	/**
 	 * Permet de recuperer l'email du Bailleur
 	 */
-	public String getemailBailleur() {
+	public String getEmailBailleur() {
 		return emailBailleur.getText();
 	}
 	
@@ -356,13 +269,6 @@ public class AjoutBailleur extends JFrame {
 	 */
 	public String getAdresse() {
 		return adresse.getText();
-	}
-	
-	/**
-	 * Permet de recuperer la raison sociale
-	 */
-	public String getRaisonSociale() {
-		return raisonSociale.getText();
 	}
 	
 	/**
