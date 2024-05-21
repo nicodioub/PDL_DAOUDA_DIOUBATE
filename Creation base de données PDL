@@ -5,6 +5,7 @@ DROP TABLE BAILLEUR;
 DROP TABLE BIEN;
 DROP TABLE GARANT;
 DROP TABLE EMPLOYE;
+DROP TABLE ECHEANCE;
 
 
 CREATE TABLE GARANT (
@@ -18,8 +19,8 @@ CREATE TABLE BIEN (
     idBien NUMBER(10,0), 
     typeBien VARCHAR2(100), 
     surfaceBien NUMBER,
-    isMaisonIndividuelle NUMBER(1),
     CodePostal NUMBER,
+    isMaisonIndividuelle NUMBER(1),
     isAppartement NUMBER(1),
     nombreChambre NUMBER, 
     anneeConstruction NUMBER,
@@ -58,7 +59,9 @@ CREATE TABLE BAILLEUR (
     prenom VARCHAR(150), 
     adresse VARCHAR(150), 
     email VARCHAR(150), 
-    telephone VARCHAR(20)
+    telephone VARCHAR(20),
+    idBien NUMBER,
+    CONSTRAINT FK_BAILLEUR_BIEN FOREIGN KEY(idBien) REFERENCES BIEN(idBien)
 );
 
 CREATE TABLE LOCATAIRE (
@@ -87,15 +90,13 @@ CREATE TABLE BAIL (
     fraisAgence FLOAT,
     dateEcheance DATE,
     freqRevision NUMBER,
-    isGarant NUMBER(1),
-    nomGarant VARCHAR2(150),
-    prenomGarant VARCHAR2(150),
     idBailleur NUMBER,
     idLocataire NUMBER,
     idGarant NUMBER,
     CONSTRAINT FK_BAIL_BAILLEUR FOREIGN KEY(idBailleur) REFERENCES BAILLEUR(idBailleur),
     CONSTRAINT FK_BAIL_GARANT FOREIGN KEY(idGarant) REFERENCES GARANT(idGarant)
 );
+
 
 
 CREATE TABLE BAIL_LOCATAIRE(
@@ -111,6 +112,22 @@ CREATE TABLE EMPLOYE(
     password VARCHAR2(50)
 );
 
+CREATE TABLE ECHEANCE (
+idEcheance NUMBER PRIMARY KEY,
+dateEcheance DATE,
+statutPaiement VARCHAR2(50) DEFAULT 'impayé',
+historique NUMBER ,
+montantLoyer NUMBER , 
+montantRetard NUMBER,
+penaliteRetard NUMBER,
+commentaire VARCHAR2(250),
+idLocataire NUMBER, 
+idBail NUMBER,
+
+CONSTRAINT FK_ECHEANCE_LOCATAIRE FOREIGN KEY(idLocataire) REFERENCES LOCATAIRE(idLocataire),
+CONSTRAINT FK_ECHEANCE_BAIL FOREIGN KEY(idBail) REFERENCES BAIL(idBail)
+);
+
 
 INSERT INTO EMPLOYE (idEmploye, login, password) VALUES (1, 'username', 'password');
 
@@ -122,4 +139,4 @@ INSERT INTO BIEN (idBien, typeBien, surfaceBien, isMaisonIndividuelle, isApparte
 VALUES (2, 'Appartement', 80, 0, 1, 2, 1990, 6, 'Marseille', 12, 2, 5, 'Avenue', 'Sample Avenue', 'Sample Residence', 0, 'Electrique', 0, NULL, 0, 0, NULL, 1, 0, 0, 0, NULL, 1, 15.5, 0, NULL, 'Non meublé');
 
 INSERT INTO EMPLOYE(idEmploye, login, password)
-VALUES (2,a,a);
+VALUES (2,'a','a');
