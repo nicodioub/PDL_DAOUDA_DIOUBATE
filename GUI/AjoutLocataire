@@ -1,0 +1,403 @@
+// Faire le DAO de Locataire avant de pouvoir continuer ca 
+
+package gui;
+
+import javax.swing.*;
+import dao.*;
+import model.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class AjoutLocataire extends JFrame {
+	
+	private JPanel jlBackground;
+    private JButton enregistrer;
+    private boolean enregistrerButton = false;
+	private Container container;
+	
+		
+    // Zone de texte pour le nom du locataire
+    private JTextField nomLocataire = new JTextField("Nom du locataire");
+    
+    // Zone de texte pour le prénom du locataire
+    private JTextField prenomLocataire = new JTextField("Prénom du locataire");
+    
+    // Zone de texte pour l'adresse du locataire
+    private JTextField adresse = new JTextField("Adresse du locataire");
+    
+    // Zone de texte pour le mail du locataire
+    private JTextField emailLocataire = new JTextField("Email du locataire");
+    
+    // Zone de texte pour le numéro du locataire
+    private JTextField numeroLocataire = new JTextField("Numéro du locataire");
+    
+    // Zone de texte pour la raison sociale du locataire
+    private JTextField raisonSociale = new JTextField("Raison sociale");
+    
+    // Zone de texte pour l'id du Bien associé au locataire
+    private JTextField idBien = new JTextField("Id du bien");
+	   
+	    
+    // Création du menu pour indiquer si le bien est une société ou pas
+   	String[] choixMenuSociete = {"Société", "Oui", "Non"};
+   	private String choixSocieteOuNon;
+    private JComboBox<String> menuSociete = new JComboBox<>(choixMenuSociete);
+    
+    
+
+	public AjoutLocataire (String title, int width, int height  ) {
+			
+		this.setTitle(title);
+		this.setSize(width, height);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+	       
+	    jlBackground = new JPanel();
+		this.setContentPane(jlBackground);
+		enregistrer = new JButton("Enregistrer");
+		container = this.getContentPane();
+		container.setLayout(null); // Définir le layout sur null pour permettre le positionnement absolu
+			
+		
+	    nomLocataire.setBounds(100,90,150,30);
+	    prenomLocataire.setBounds(100,130,150,30);
+	    adresse.setBounds(100,170,150,30);
+	    emailLocataire.setBounds(100,210,150,30);
+	    numeroLocataire.setBounds(100,250,150,30);
+	    menuSociete.setBounds(100,290,150,30);
+	    raisonSociale.setBounds(100,330,150,30);
+	    idBien.setBounds(100,410,150,30);
+	
+	    enregistrer.setBounds(300, 650, 150, 30);
+	    
+	    
+	    // Définir un rendu personnalisé pour le menu déroulant pour l'indicateur societe
+	    menuSociete.setRenderer(new DefaultListCellRenderer() {
+	        @Override
+	        public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+	            JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+	            
+	            // Afficher le texte d'information en gras et en gris
+	            if (index == 0) {
+	                label.setFont(label.getFont().deriveFont(Font.BOLD));
+	                label.setForeground(Color.GRAY);
+	            }
+	            
+	            return label;
+	        }
+	    });
+	
+	    // Ajout d'un écouteur d'événements pour détecter la sélection d'un élément
+	    menuSociete.addActionListener(new ActionListener() {
+	        @Override
+	        public void actionPerformed(ActionEvent e) {
+	            // Récupérer l'élément sélectionné et l'afficher
+	            choixSocieteOuNon = (String) menuSociete.getSelectedItem();
+	            
+	            // Activer ou désactiver le champ de texte en fonction de la sélection dans le menu déroulant
+	            if (choixSocieteOuNon.equals("Oui")) {
+	                raisonSociale.setEnabled(true);
+	            } else {
+	            	raisonSociale.setEnabled(false);
+	            }
+	        }
+	    });
+	    
+	    
+	    // Ajout d'un écouteur de focus au champ de texte du nom du locataire
+	    nomLocataire.addFocusListener(new FocusListener() {
+	        @Override
+	        public void focusGained(FocusEvent e) {
+	            // Efface le texte indicatif lorsque le champ de texte obtient le focus
+	            if (nomLocataire.getText().equals("Nom du locataire")) {
+	            	nomLocataire.setText("");
+	            }
+	        }
+	
+	        @Override
+	        public void focusLost(FocusEvent e) {
+	            // Restaure le texte indicatif si le champ de texte est vide lorsqu'il perd le focus
+	            if (nomLocataire.getText().isEmpty()) {
+	            	nomLocataire.setText("Nom du locataire");
+	            }
+	        }
+	    });
+	    
+	    // Ajout d'un écouteur de focus au champ de texte du prénom du locataire
+	    prenomLocataire.addFocusListener(new FocusListener() {
+	        @Override
+	        public void focusGained(FocusEvent e) {
+	            // Efface le texte indicatif lorsque le champ de texte obtient le focus
+	            if (prenomLocataire.getText().equals("Prénom du locataire")) {
+	            	prenomLocataire.setText("");
+	            }
+	        }
+	
+	        @Override
+	        public void focusLost(FocusEvent e) {
+	            // Restaure le texte indicatif si le champ de texte est vide lorsqu'il perd le focus
+	            if (prenomLocataire.getText().isEmpty()) {
+	            	prenomLocataire.setText("Prénom du locataire");
+	            }
+	        }
+	    });
+	    
+	    // Ajout d'un écouteur de focus au champ de texte du numéro du locataire
+	    numeroLocataire.addFocusListener(new FocusListener() {
+	        @Override
+	        public void focusGained(FocusEvent e) {
+	            // Efface le texte indicatif lorsque le champ de texte obtient le focus
+	            if (numeroLocataire.getText().equals("Numéro du locataire")) {
+	            	numeroLocataire.setText("");
+	            }
+	        }
+	
+	        @Override
+	        public void focusLost(FocusEvent e) {
+	            // Restaure le texte indicatif si le champ de texte est vide lorsqu'il perd le focus
+	            if (numeroLocataire.getText().isEmpty()) {
+	            	numeroLocataire.setText("Numéro du locataire");
+	            }
+	        }
+	    });
+	    
+	    // Ajout d'un écouteur de focus au champ de texte de la raison sociale
+	    raisonSociale.addFocusListener(new FocusListener() {
+	        @Override
+	        public void focusGained(FocusEvent e) {
+	            // Efface le texte indicatif lorsque le champ de texte obtient le focus
+	            if (raisonSociale.getText().equals("Raison sociale")) {
+	            	raisonSociale.setText("");
+	            }
+	        }
+	
+	        @Override
+	        public void focusLost(FocusEvent e) {
+	            // Restaure le texte indicatif si le champ de texte est vide lorsqu'il perd le focus
+	            if (raisonSociale.getText().isEmpty()) {
+	            	raisonSociale.setText("Raison sociale");
+	            }
+	        }
+	    });
+	    
+	    // Ajout d'un écouteur de focus au champ de texte de l'adresse du locataire
+	    adresse.addFocusListener(new FocusListener() {
+	        @Override
+	        public void focusGained(FocusEvent e) {
+	            // Efface le texte indicatif lorsque le champ de texte obtient le focus
+	            if (adresse.getText().equals("Adresse du locataire")) {
+	            	adresse.setText("");
+	            }
+	        }
+	
+	        @Override
+	        public void focusLost(FocusEvent e) {
+	            // Restaure le texte indicatif si le champ de texte est vide lorsqu'il perd le focus
+	            if (adresse.getText().isEmpty()) {
+	            	adresse.setText("Adresse du locataire");
+	            }
+	        }
+	    });
+	    
+	    // Ajout d'un écouteur de focus au champ de texte de l'email du locataire
+	    emailLocataire.addFocusListener(new FocusListener() {
+	        @Override
+	        public void focusGained(FocusEvent e) {
+	            // Efface le texte indicatif lorsque le champ de texte obtient le focus
+	            if (emailLocataire.getText().equals("Email du locataire")) {
+	            	emailLocataire.setText("");
+	            }
+	        }
+	
+	        @Override
+	        public void focusLost(FocusEvent e) {
+	            // Restaure le texte indicatif si le champ de texte est vide lorsqu'il perd le focus
+	            if (emailLocataire.getText().isEmpty()) {
+	            	emailLocataire.setText("Email du locataire");
+	            }
+	        }
+	    });
+	    
+	    // Ajout d'un écouteur de focus au champ de texte de l'id du bien
+	    idBien.addFocusListener(new FocusListener() {
+	        @Override
+	        public void focusGained(FocusEvent e) {
+	            // Efface le texte indicatif lorsque le champ de texte obtient le focus
+	            if (idBien.getText().equals("Id du bien")) {
+	            	idBien.setText("");
+	            }
+	        }
+	
+	        @Override
+	        public void focusLost(FocusEvent e) {
+	            // Restaure le texte indicatif si le champ de texte est vide lorsqu'il perd le focus
+	            if (idBien.getText().isEmpty()) {
+	            	idBien.setText("Id du bien");
+	            }
+	        }
+	    });
+	
+	       
+	    container.add(nomLocataire);
+	    container.add(prenomLocataire);
+	    container.add(adresse);
+	    container.add(emailLocataire);
+	    container.add(numeroLocataire);
+	    container.add(menuSociete);
+	    container.add(raisonSociale);
+	    container.add(idBien);
+	    container.add(enregistrer);
+	    jlBackground.setBackground(Color.BLACK);
+			
+	    this.setLocationRelativeTo(null);
+	    this.setVisible(true);		
+			
+			
+		enregistrer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				enregistrerButton = true;
+
+		    	int test = 1; //Variable qui vérifie que tous les champs sont remplis
+		    	
+		    	if (nomLocataire.getText().equals("Nom du locataire")) {
+		    		JOptionPane.showMessageDialog(null, "Vous n'avez pas rempli le champ 'Nom du locataire' !", "Erreur de remplissage", JOptionPane.ERROR_MESSAGE);
+		    		test = 0;
+		    	}
+		    	else if (prenomLocataire.getText().equals("Prénom du locataire")) {
+		    		JOptionPane.showMessageDialog(null, "Vous n'avez pas rempli le champ 'Prénom du locataire' !", "Erreur de remplissage", JOptionPane.ERROR_MESSAGE);
+		    		test = 0;
+		    	}
+		    	else if (adresse.getText().equals("Adresse du locataire")) {
+		    		JOptionPane.showMessageDialog(null, "Vous n'avez pas rempli le champ 'Adresse du locataire' !", "Erreur de remplissage", JOptionPane.ERROR_MESSAGE);
+		    		test = 0;
+		    	}
+		    	else if (emailLocataire.getText().equals("Email du locataire")) {
+		    		JOptionPane.showMessageDialog(null, "Vous n'avez pas rempli le champ 'Email du locataire' !", "Erreur de remplissage", JOptionPane.ERROR_MESSAGE);
+		    		test = 0;
+		    	}
+		    	else if (numeroLocataire.getText().equals("Numéro du locataire")) {
+		    		JOptionPane.showMessageDialog(null, "Vous n'avez pas rempli le champ 'Numéro du locataire' !", "Erreur de remplissage", JOptionPane.ERROR_MESSAGE);
+		    		test = 0;
+		    	}
+		    	else if (choixSocieteOuNon == null) {
+		    		JOptionPane.showMessageDialog(null, "Vous n'avez pas sélectionné l'option 'Société' !", "Erreur de remplissage", JOptionPane.ERROR_MESSAGE);
+		    		test = 0;
+		    	}
+		    	else if (choixSocieteOuNon.equals("Oui") && raisonSociale.getText().equals("Raison sociale")) {
+		    		JOptionPane.showMessageDialog(null, "Vous n'avez pas rempli le champ 'Raison sociale' !", "Erreur de remplissage", JOptionPane.ERROR_MESSAGE);
+		    		test = 0;
+		    	}
+		    	else if (idBien.getText().equals("Id du bien")) {
+		    		JOptionPane.showMessageDialog(null, "Vous n'avez pas rempli le champ 'Id du bien' !", "Erreur de remplissage", JOptionPane.ERROR_MESSAGE);
+		    		test = 0;
+		    	}
+	    	
+		    	if (test == 1) {
+		    	Locataire locataire = new Locataire(0, defaultText(nomLocataire.getText()),
+		    										defaultText(prenomLocataire.getText()), 
+		    										defaultText(adresse.getText()), 
+		    										defaultText(emailLocataire.getText()),
+		    										defaultText(numeroLocataire.getText()),
+		    										isSociete(), defaultText(raisonSociale.getText()), 
+		    										convertTextToInt(idBien.getText(), "Id du bien"));	    	
+		    	LocataireDAO LocataireDAO = new LocataireDAO();			    	
+				LocataireDAO.addLocataire(locataire);
+				JOptionPane.showMessageDialog(null, "Le locataire a été correctement ajouté à la base de données !", "Message de confirmation", JOptionPane.INFORMATION_MESSAGE);
+		    	}
+			}
+		});
+	}
+
+	public boolean enregistrerClicked() {
+		return enregistrerButton;
+	}
+	
+	/**
+	 * Permet de savoir si le bien est une société ou pas
+	 */
+	public boolean isSociete() {
+		if (choixSocieteOuNon == null)
+			return false;
+		else if (choixSocieteOuNon.equals("Non"))
+			return false;
+		else
+			return false;
+	}
+	
+	/**
+	 * Permet de recuperer le nom du locataire
+	 */
+	public String getNomLocataire() {
+		return nomLocataire.getText();
+	}
+	
+	/**
+	 * Permet de recuperer le prénom du locataire
+	 */
+	public String getPrénomLocataire() {
+		return prenomLocataire.getText();
+	}
+	
+	/**
+	 * Permet de recuperer le numero du locataire
+	 */
+	public String getNumeroLocataire() {
+		return numeroLocataire.getText();
+	}
+	
+	/**
+	 * Permet de recuperer l'email du locataire
+	 */
+	public String getEmailLocataire() {
+		return emailLocataire.getText();
+	}
+	
+	/**
+	 * Permet de recuperer l'adresse du locataire
+	 */
+	public String getAdresse() {
+		return adresse.getText();
+	}
+	
+	/**
+	 * Permet de recuperer la raison sociale
+	 */
+	public String getRaisonSociale() {
+		return raisonSociale.getText();
+	}
+	
+	/**
+	 * Permet de recuperer l'id du bien
+	 */
+	public String getIdBien() {
+		return idBien.getText();
+	}
+	
+	/**
+	 * Permet de convertir des entiers de String à int
+	 * 
+	 * @param text : un entier en String
+	 * 
+	 * @return sa valeur en int
+	 */
+	public int convertTextToInt(String text, String text1) {
+		if (text.equals(text1))
+			return 0;
+		else
+			return Integer.parseInt(text);
+	}
+	
+	/**
+	 * Permet d'afficher un texte par défaut si certains champs ne sont pas remplis
+	 * 
+	 * @param text : un entier en String
+	 * 
+	 * @return le texte par défaut
+	 */
+	public String defaultText(String text) {
+		if (text == null || text.equals(""))
+			text = "Non renseigné";
+		return text;
+	}
+
+}
