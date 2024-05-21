@@ -243,6 +243,656 @@ public class BienDAO extends ConnectionDAO {
 		return returnValue;
 	}
 
+	public int updateComponent(Bien bien) {
+		Connection con = null;
+		PreparedStatement ps = null;
+		int returnValue = 0;
+
+		// connexion a la base de donnees
+		try {
+
+			// tentative de connexion
+			con = DriverManager.getConnection(URL, LOGIN, PASS);
+			// preparation de l'instruction SQL, chaque ? represente une valeur
+			// a communiquer dans la modification.
+			// les getters permettent de recuperer les valeurs des attributs souhaites
+			ps = con.prepareStatement("UPDATE BIEN set typeBien = ?, surfaceBien = ?, codePostal = ?, isMaisonIndividuelle = ?, isAppartement = ?, nombreChambre = ?, anneeConstruction = ?, arrondissement = ?, ville = ?, numAppartement = ?, numEtage = ?, numRue = ?, typeRue = ?, nomRue = ?, nomResidence = ?, isChauffageIndividuel = ?, typeChauffage = ?, isJardin = ?, surfaceJardin = ?, isMeuble = ?, isTerrain = ?, surfaceTerrain = ?, isEscalier = ?, isCave = ?, isSousSol = ?, isCour = ?, surfaceCour = ?, isBalcon = ?, surfaceBalcon = ?, isTerrasse = ?, surfaceTerrasse = ?, descriptionMeuble = ? WHERE id = ?");
+			ps.setString(1, bien.getType());
+			ps.setFloat(2, bien.getSurface());
+			ps.setInt(3, bien.getCodePostal());
+			ps.setBoolean(4, bien.isMaisonIndividuelle());
+			ps.setBoolean(5, bien.isAppartement());
+			ps.setInt(6, bien.getNombreChambres());
+			ps.setInt(7, bien.getAnneeConstruction());
+			ps.setInt(8, bien.getArrondissement());
+			ps.setString(9, bien.getVille());
+			ps.setInt(10, bien.getNumAppartement());
+			ps.setInt(11, bien.getEtage());
+			ps.setInt(12, bien.getNumRue());
+			ps.setString(13, bien.getTypeRue());
+			ps.setString(14, bien.getNomRue());
+			ps.setString(15, bien.getResidence());
+			ps.setBoolean(16, bien.aChauffageIndividuel());
+			ps.setString(17, bien.getTypeChauffage());	
+			ps.setBoolean(18, bien.aUnJardin());
+			ps.setFloat(19, bien.getSurfaceJardin());
+			ps.setBoolean(20, bien.isMeuble());
+			ps.setBoolean(21, bien.aUnTerrain());
+			ps.setFloat(22, bien.getSurfaceTerrain());
+			ps.setBoolean(23, bien.aUnEscalier());
+			ps.setBoolean(24, bien.aUneCave());
+			ps.setBoolean(25, bien.aUnSousSol());
+			ps.setBoolean(26, bien.aUneCour());
+			ps.setFloat(27, bien.getSurfaceCour());
+			ps.setBoolean(28, bien.aUnBalcon());
+			ps.setFloat(29, bien.getSurfaceBalcon());
+			ps.setBoolean(30, bien.aUneTerrasse());
+			ps.setFloat(31, bien.getSurfaceTerrasse());
+			ps.setString(32, bien.getDescriptionMeubles());
+			ps.setInt(33, bien.getIdBien());
+
+			// Execution de la requete
+			returnValue = ps.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// fermeture du preparedStatement et de la connexion
+			try {
+				if (ps != null) {
+					ps.close();
+				}
+			} catch (Exception ignore) {
+			}
+			try {
+				if (con != null) {
+					con.close();
+				}
+			} catch (Exception ignore) {
+			}
+		}
+		return returnValue;
+	}
+	
+	public int updateTypeDeBien(int idLocataire, String nouveauTypeDeBien) {
+	    Connection con = null;
+	    PreparedStatement ps = null;
+	    int returnValue = 0;
+
+	    // connexion à la base de données
+	    try {
+	        // tentative de connexion
+	        con = DriverManager.getConnection(URL, LOGIN, PASS);
+
+	        // préparation de l'instruction SQL
+	        ps = con.prepareStatement("UPDATE Locataire SET typeBien = ? WHERE idLocataire = ?");
+	        ps.setString(1, nouveauTypeDeBien);
+	        ps.setInt(2, idLocataire);
+
+	        // exécution de la requête
+	        returnValue = ps.executeUpdate();
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        // fermeture du preparedStatement et de la connexion
+	        try {
+	            if (ps != null) {
+	                ps.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	        try {
+	            if (con != null) {
+	                con.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	    }
+	    return returnValue;
+	}
+
+	
+	public int updateSurface(int idLocataire, int nouvelleSurface) {
+	    Connection con = null;
+	    PreparedStatement ps = null;
+	    int returnValue = 0;
+
+	    // connexion à la base de données
+	    try {
+	        // tentative de connexion
+	        con = DriverManager.getConnection(URL, LOGIN, PASS);
+
+	        // préparation de l'instruction SQL
+	        ps = con.prepareStatement("UPDATE Bien SET surfaceBien = ? WHERE idBien = ?");
+	        ps.setInt(1, nouvelleSurface);
+	        ps.setInt(2, idLocataire);
+
+	        // exécution de la requête
+	        returnValue = ps.executeUpdate();
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        // fermeture du preparedStatement et de la connexion
+	        try {
+	            if (ps != null) {
+	                ps.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	        try {
+	            if (con != null) {
+	                con.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	    }
+	    return returnValue;
+	}
+
+	public int updateCodePostal(int idLocataire, int newValueInt) {
+	    Connection con = null;
+	    PreparedStatement ps = null;
+	    int returnValue = 0;
+
+	    // connexion à la base de données
+	    try {
+	        // tentative de connexion
+	        con = DriverManager.getConnection(URL, LOGIN, PASS);
+
+	        // préparation de l'instruction SQL
+	        ps = con.prepareStatement("UPDATE Locataire SET CodePostal = ? WHERE idLocataire = ?");
+	        ps.setInt(1, newValueInt);
+	        ps.setInt(2, idLocataire);
+
+	        // exécution de la requête
+	        returnValue = ps.executeUpdate();
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        // fermeture du preparedStatement et de la connexion
+	        try {
+	            if (ps != null) {
+	                ps.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	        try {
+	            if (con != null) {
+	                con.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	    }
+	    return returnValue;
+	}
+
+	public int updateNumEtage(int idLocataire, int newValueInt) {
+
+	    Connection con = null;
+	    PreparedStatement ps = null;
+	    int returnValue = 0;
+
+	    // connexion à la base de données
+	    try {
+	        // tentative de connexion
+	        con = DriverManager.getConnection(URL, LOGIN, PASS);
+
+	        // préparation de l'instruction SQL
+	        ps = con.prepareStatement("UPDATE Locataire SET numEtage = ? WHERE idLocataire = ?");
+	        ps.setInt(1, newValueInt);
+	        ps.setInt(2, idLocataire);
+
+	        // exécution de la requête
+	        returnValue = ps.executeUpdate();
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        // fermeture du preparedStatement et de la connexion
+	        try {
+	            if (ps != null) {
+	                ps.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	        try {
+	            if (con != null) {
+	                con.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	    }
+	    return returnValue;
+	}
+	
+	
+	public int updateNumRue(int idLocataire, int newValueInt) {
+
+		
+	    Connection con = null;
+	    PreparedStatement ps = null;
+	    int returnValue = 0;
+
+	    // connexion à la base de données
+	    try {
+	        // tentative de connexion
+	        con = DriverManager.getConnection(URL, LOGIN, PASS);
+
+	        // préparation de l'instruction SQL
+	        ps = con.prepareStatement("UPDATE Locataire SET numRUe = ? WHERE idLocataire = ?");
+	        ps.setInt(1, newValueInt);
+	        ps.setInt(2, idLocataire);
+
+	        // exécution de la requête
+	        returnValue = ps.executeUpdate();
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        // fermeture du preparedStatement et de la connexion
+	        try {
+	            if (ps != null) {
+	                ps.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	        try {
+	            if (con != null) {
+	                con.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	    }
+	    return returnValue;
+	}
+
+	public int updateTypeRue(int idLocataire, String nouveauTypeRue) {
+	    Connection con = null;
+	    PreparedStatement ps = null;
+	    int returnValue = 0;
+
+	    // connexion à la base de données
+	    try {
+	        // tentative de connexion
+	        con = DriverManager.getConnection(URL, LOGIN, PASS);
+
+	        // préparation de l'instruction SQL
+	        ps = con.prepareStatement("UPDATE Locataire SET typeRue = ? WHERE idLocataire = ?");
+	        ps.setString(1, nouveauTypeRue);
+	        ps.setInt(2, idLocataire);
+
+	        // exécution de la requête
+	        returnValue = ps.executeUpdate();
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        // fermeture du preparedStatement et de la connexion
+	        try {
+	            if (ps != null) {
+	                ps.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	        try {
+	            if (con != null) {
+	                con.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	    }
+	    return returnValue;
+	}
+
+	public int updateNomRue(int idLocataire, String nomRue) {
+	    Connection con = null;
+	    PreparedStatement ps = null;
+	    int returnValue = 0;
+
+	    // connexion à la base de données
+	    try {
+	        // tentative de connexion
+	        con = DriverManager.getConnection(URL, LOGIN, PASS);
+
+	        // préparation de l'instruction SQL
+	        ps = con.prepareStatement("UPDATE Locataire SET nomRue = ? WHERE idLocataire = ?");
+	        ps.setString(1, nomRue);
+	        ps.setInt(2, idLocataire);
+
+	        // exécution de la requête
+	        returnValue = ps.executeUpdate();
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        // fermeture du preparedStatement et de la connexion
+	        try {
+	            if (ps != null) {
+	                ps.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	        try {
+	            if (con != null) {
+	                con.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	    }
+	    return returnValue;
+	}
+
+	public int updateNomResidence(int idLocataire, String newNomResidence) {
+	    Connection con = null;
+	    PreparedStatement ps = null;
+	    int returnValue = 0;
+
+	    // connexion à la base de données
+	    try {
+	        // tentative de connexion
+	        con = DriverManager.getConnection(URL, LOGIN, PASS);
+
+	        // préparation de l'instruction SQL
+	        ps = con.prepareStatement("UPDATE Locataire SET nomResidence = ? WHERE idLocataire = ?");
+	        ps.setString(1, newNomResidence);
+	        ps.setInt(2, idLocataire);
+
+	        // exécution de la requête
+	        returnValue = ps.executeUpdate();
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        // fermeture du preparedStatement et de la connexion
+	        try {
+	            if (ps != null) {
+	                ps.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	        try {
+	            if (con != null) {
+	                con.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	    }
+	    return returnValue;
+	}
+
+	public int updateTypeChauffage(int idLocataire, String typeChauffage) {
+	    Connection con = null;
+	    PreparedStatement ps = null;
+	    int returnValue = 0;
+
+	    // connexion à la base de données
+	    try {
+	        // tentative de connexion
+	        con = DriverManager.getConnection(URL, LOGIN, PASS);
+
+	        // préparation de l'instruction SQL
+	        ps = con.prepareStatement("UPDATE Locataire SET typeChauffage = ? WHERE idLocataire = ?");
+	        ps.setString(1, typeChauffage);
+	        ps.setInt(2, idLocataire);
+
+	        // exécution de la requête
+	        returnValue = ps.executeUpdate();
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        // fermeture du preparedStatement et de la connexion
+	        try {
+	            if (ps != null) {
+	                ps.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	        try {
+	            if (con != null) {
+	                con.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	    }
+	    return returnValue;
+	}
+
+	public int updateSurfaceJardin(int idLocataire, int nouveauTypeDeBien) {
+	    Connection con = null;
+	    PreparedStatement ps = null;
+	    int returnValue = 0;
+
+	    // connexion à la base de données
+	    try {
+	        // tentative de connexion
+	        con = DriverManager.getConnection(URL, LOGIN, PASS);
+
+	        // préparation de l'instruction SQL
+	        ps = con.prepareStatement("UPDATE Locataire SET surfaceJardin = ? WHERE idLocataire = ?");
+	        ps.setInt(1, nouveauTypeDeBien);
+	        ps.setInt(2, idLocataire);
+
+	        // exécution de la requête
+	        returnValue = ps.executeUpdate();
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        // fermeture du preparedStatement et de la connexion
+	        try {
+	            if (ps != null) {
+	                ps.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	        try {
+	            if (con != null) {
+	                con.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	    }
+	    return returnValue;
+	}
+
+	
+	public int updatesurfaceTerrain(int idLocataire, int newValueInt) {
+	    Connection con = null;
+	    PreparedStatement ps = null;
+	    int returnValue = 0;
+
+	    // connexion à la base de données
+	    try {
+	        // tentative de connexion
+	        con = DriverManager.getConnection(URL, LOGIN, PASS);
+
+	        // préparation de l'instruction SQL
+	        ps = con.prepareStatement("UPDATE Locataire SET surfaceTerrain = ? WHERE idLocataire = ?");
+	        ps.setInt(1, newValueInt);
+	        ps.setInt(2, idLocataire);
+
+	        // exécution de la requête
+	        returnValue = ps.executeUpdate();
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        // fermeture du preparedStatement et de la connexion
+	        try {
+	            if (ps != null) {
+	                ps.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	        try {
+	            if (con != null) {
+	                con.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	    }
+	    return returnValue;
+	}
+
+	public int updateSurfaceCour(int idLocataire, int newValueInt) {
+	    Connection con = null;
+	    PreparedStatement ps = null;
+	    int returnValue = 0;
+
+	    // connexion à la base de données
+	    try {
+	        // tentative de connexion
+	        con = DriverManager.getConnection(URL, LOGIN, PASS);
+
+	        // préparation de l'instruction SQL
+	        ps = con.prepareStatement("UPDATE Locataire SET surfaceCour = ? WHERE idLocataire = ?");
+	        ps.setInt(1, newValueInt);
+	        ps.setInt(2, idLocataire);
+
+	        // exécution de la requête
+	        returnValue = ps.executeUpdate();
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        // fermeture du preparedStatement et de la connexion
+	        try {
+	            if (ps != null) {
+	                ps.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	        try {
+	            if (con != null) {
+	                con.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	    }
+	    return returnValue;
+	}
+
+	
+	public int updateSurfaceBalcon(int idLocataire, int newValueInt) {
+	    Connection con = null;
+	    PreparedStatement ps = null;
+	    int returnValue = 0;
+
+	    // connexion à la base de données
+	    try {
+	        // tentative de connexion
+	        con = DriverManager.getConnection(URL, LOGIN, PASS);
+
+	        // préparation de l'instruction SQL
+	        ps = con.prepareStatement("UPDATE Locataire SET surfaceBalcon = ? WHERE idLocataire = ?");
+	        ps.setInt(1, newValueInt);
+	        ps.setInt(2, idLocataire);
+
+	        // exécution de la requête
+	        returnValue = ps.executeUpdate();
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        // fermeture du preparedStatement et de la connexion
+	        try {
+	            if (ps != null) {
+	                ps.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	        try {
+	            if (con != null) {
+	                con.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	    }
+	    return returnValue;
+	}
+
+	
+	public int updateSurfaceTerasse(int idLocataire, int newValueInt) {
+	    Connection con = null;
+	    PreparedStatement ps = null;
+	    int returnValue = 0;
+
+	    // connexion à la base de données
+	    try {
+	        // tentative de connexion
+	        con = DriverManager.getConnection(URL, LOGIN, PASS);
+
+	        // préparation de l'instruction SQL
+	        ps = con.prepareStatement("UPDATE Locataire SET surfaceTerasse = ? WHERE idLocataire = ?");
+	        ps.setInt(1, newValueInt);
+	        ps.setInt(2, idLocataire);
+
+	        // exécution de la requête
+	        returnValue = ps.executeUpdate();
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        // fermeture du preparedStatement et de la connexion
+	        try {
+	            if (ps != null) {
+	                ps.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	        try {
+	            if (con != null) {
+	                con.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	    }
+	    return returnValue;
+	}
+
+	public int updateDescriptionMeuble(int idLocataire, String nouveauTypeDeBien) {
+	    Connection con = null;
+	    PreparedStatement ps = null;
+	    int returnValue = 0;
+
+	    // connexion à la base de données
+	    try {
+	        // tentative de connexion
+	        con = DriverManager.getConnection(URL, LOGIN, PASS);
+
+	        // préparation de l'instruction SQL
+	        ps = con.prepareStatement("UPDATE Locataire SET descriptionMeuble = ? WHERE idLocataire = ?");
+	        ps.setString(1, nouveauTypeDeBien);
+	        ps.setInt(2, idLocataire);
+
+	        // exécution de la requête
+	        returnValue = ps.executeUpdate();
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        // fermeture du preparedStatement et de la connexion
+	        try {
+	            if (ps != null) {
+	                ps.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	        try {
+	            if (con != null) {
+	                con.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	    }
+	    return returnValue;
+	}
+
+
 	/**
 	 * Permet de supprimer un bien par identifiant dans la table BIEN.
 	 * Le mode est auto-commit par defaut : chaque suppression est validee
@@ -295,6 +945,8 @@ public class BienDAO extends ConnectionDAO {
 	 * @param idBien l'identifiant du bien a recuperer
 	 * @return le bien trouve; null si aucun bien ne correspond a cet identifiant
 	 */
+	
+	
 	public Bien getBien(int idBien) {
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -357,11 +1009,288 @@ public class BienDAO extends ConnectionDAO {
 		return returnValue;
 	}
 
+	public String[] getBienPartiel(int idBien) {
+	    Connection con = null;
+	    PreparedStatement ps = null;
+	    ResultSet rs = null;
+	    String[] returnValue = new String[2]; // Pour stocker id et type
+
+	    // Connexion à la base de données
+	    try {
+	        con = DriverManager.getConnection(URL, LOGIN, PASS);
+	        ps = con.prepareStatement("SELECT idBien, typeBien, surfaceBien, adresse, ville FROM BIEN WHERE idBien = ?");
+	        ps.setInt(1, idBien);
+
+	        // Exécution de la requête
+	        rs = ps.executeQuery();
+	        
+	        // Si une ligne est retournée
+	        if (rs.next()) {
+	            returnValue[0] = rs.getString("idBien"); // Récupération de id
+	            returnValue[1] = rs.getString("typeBien"); // Récupération de type
+	            returnValue[2] = rs.getString("surfaceBien"); // Récupération de type
+	            returnValue[3] = rs.getString("adresse"); // Récupération de type
+	            returnValue[4] = rs.getString("ville"); // Récupération de type
+
+
+	        }
+	    } catch (Exception ee) {
+	        ee.printStackTrace();
+	    } finally {
+	        // Fermeture des ressources
+	        try {
+	            if (rs != null) {
+	                rs.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	        try {
+	            if (ps != null) {
+	                ps.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	        try {
+	            if (con != null) {
+	                con.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	    }
+	    return returnValue;
+	}
+	
+	public String getBienId(int idBien) {
+	    Connection con = null;
+	    PreparedStatement ps = null;
+	    ResultSet rs = null;
+	    String returnValue = null; // Pour stocker l'ID
+
+	    try {
+	        con = DriverManager.getConnection(URL, LOGIN, PASS);
+	        ps = con.prepareStatement("SELECT idBien FROM BIEN WHERE idBien = ?");
+	        ps.setInt(1, idBien);
+
+	        // Exécution de la requête
+	        rs = ps.executeQuery();
+	        
+	        // Si une ligne est retournée
+	        if (rs.next()) {
+	            returnValue = rs.getString("idBien"); // Récupération de l'ID
+	        }
+	    } catch (Exception ee) {
+	        ee.printStackTrace();
+	    } finally {
+	        // Fermeture des ressources
+	        try {
+	            if (rs != null) {
+	                rs.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	        try {
+	            if (ps != null) {
+	                ps.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	        try {
+	            if (con != null) {
+	                con.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	    }
+	    return returnValue;
+	}
+	
+	public String getBienType(int idBien) {
+	    Connection con = null;
+	    PreparedStatement ps = null;
+	    ResultSet rs = null;
+	    String returnValue = null; // Pour stocker l'ID
+
+	    try {
+	        con = DriverManager.getConnection(URL, LOGIN, PASS);
+	        ps = con.prepareStatement("SELECT typeBien FROM BIEN WHERE idBien = ?");
+	        ps.setInt(1, idBien);
+
+	        // Exécution de la requête
+	        rs = ps.executeQuery();
+	        
+	        // Si une ligne est retournée
+	        if (rs.next()) {
+	            returnValue = rs.getString("typeBien"); // Récupération de l'ID
+	        }
+	    } catch (Exception ee) {
+	        ee.printStackTrace();
+	    } finally {
+	        // Fermeture des ressources
+	        try {
+	            if (rs != null) {
+	                rs.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	        try {
+	            if (ps != null) {
+	                ps.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	        try {
+	            if (con != null) {
+	                con.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	    }
+	    return returnValue;
+	}
+
+	
+	public String getBienSurface(int idBien) {
+	    Connection con = null;
+	    PreparedStatement ps = null;
+	    ResultSet rs = null;
+	    String returnValue = null; // Pour stocker l'ID
+
+	    try {
+	        con = DriverManager.getConnection(URL, LOGIN, PASS);
+	        ps = con.prepareStatement("SELECT surfaceBien FROM BIEN WHERE idBien = ?");
+	        ps.setInt(1, idBien);
+
+	        // Exécution de la requête
+	        rs = ps.executeQuery();
+	        
+	        // Si une ligne est retournée
+	        if (rs.next()) {
+	            returnValue = rs.getString("surfaceBien"); // Récupération de l'ID
+	        }
+	    } catch (Exception ee) {
+	        ee.printStackTrace();
+	    } finally {
+	        // Fermeture des ressources
+	        try {
+	            if (rs != null) {
+	                rs.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	        try {
+	            if (ps != null) {
+	                ps.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	        try {
+	            if (con != null) {
+	                con.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	    }
+	    return returnValue;
+	}
+	
+	public String getBienAdresse(int idBien) {
+	    Connection con = null;
+	    PreparedStatement ps = null;
+	    ResultSet rs = null;
+	    String returnValue = null; // Pour stocker l'ID
+
+	    try {
+	        con = DriverManager.getConnection(URL, LOGIN, PASS);
+	        ps = con.prepareStatement("SELECT numRue, typeRue, nomRue FROM BIEN WHERE idBien = ?");
+	        ps.setInt(1, idBien);
+
+	        // Exécution de la requête
+	        rs = ps.executeQuery();
+	        
+	        // Si une ligne est retournée
+	        if (rs.next()) {
+	        	 returnValue = rs.getString("numRue") + " " + rs.getString("typeRue") + " " + rs.getString("nomRue"); }
+	    } catch (Exception ee) {
+	        ee.printStackTrace();
+	    } finally {
+	        // Fermeture des ressources
+	        try {
+	            if (rs != null) {
+	                rs.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	        try {
+	            if (ps != null) {
+	                ps.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	        try {
+	            if (con != null) {
+	                con.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	    }
+	    return returnValue;
+	}
+	
+	public String getBienVille(int idBien) {
+	    Connection con = null;
+	    PreparedStatement ps = null;
+	    ResultSet rs = null;
+	    String returnValue = null; // Pour stocker l'ID
+
+	    try {
+	        con = DriverManager.getConnection(URL, LOGIN, PASS);
+	        ps = con.prepareStatement("SELECT ville FROM BIEN WHERE idBien = ?");
+	        ps.setInt(1, idBien);
+
+	        // Exécution de la requête
+	        rs = ps.executeQuery();
+	        
+	        // Si une ligne est retournée
+	        if (rs.next()) {
+	            returnValue = rs.getString("ville"); // Récupération de l'ID
+	        }
+	    } catch (Exception ee) {
+	        ee.printStackTrace();
+	    } finally {
+	        // Fermeture des ressources
+	        try {
+	            if (rs != null) {
+	                rs.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	        try {
+	            if (ps != null) {
+	                ps.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	        try {
+	            if (con != null) {
+	                con.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	    }
+	    return returnValue;
+	}
+
 	/**
 	 * Permet de recuperer tous les biens stockes dans la table BIEN
 	 * 
 	 * @return une ArrayList de Bien
 	 */
+	
+
+	
+	
+	
+	
 	public ArrayList<Bien> getList() {
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -417,6 +1346,7 @@ public class BienDAO extends ConnectionDAO {
 		}
 		return returnValue;
 	}
+	
 
 	/**
 	 * ATTENTION : Cette méthode n'a pas vocation à être executée lors d'une
