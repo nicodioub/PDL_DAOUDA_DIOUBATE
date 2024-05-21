@@ -10,9 +10,24 @@ import java.util.*;
 public class Bail {
 	
 	/**
-	 * Bailleur du bail
+	 * id du Bail
 	 */
-	private Bailleur bailleur;
+	private int idBail;
+	
+	/**
+	 * id du Garant
+	 */
+	private int idGarant;
+	
+	/**
+	 * id du Bailleur
+	 */
+	private int idBailleur;
+	
+	/**
+	 * id du Locataire
+	 */
+	private int idLocataire;
 	
 	/**
 	 * Duree du bail (en mois)
@@ -55,30 +70,19 @@ public class Bail {
 	private float montantCaution;
 	
 	/**
+	 * Date d'échéance
+	 */
+	private Date dateEcheance;
+	
+	/**
 	 * Frequence de revision du loyer
 	 */
-	private String frequenceRevisionLoyer;
-	
-	/**
-	 * Permet de savoir si le bail presente un garant ou non
-	 */
-	private boolean presenceGarant;
-	
-	/**
-	 * Garant du bail
-	 */
-	private Garant garant;
-	
-	/**
-	 * Liste des locataires du bien associe au bail
-	 */
-	private ArrayList<Locataire> listeLocataires;
+	private int frequenceRevisionLoyer;
 	
 	
 	/**
 	 * Constructeur de la classe Bail
 	 * 
-	 * @param bailleur : un bailleur
 	 * @param duree : duree quelconque
 	 * @param type : type quelconque
 	 * @param dateDebut : date de debut quelconque
@@ -91,11 +95,14 @@ public class Bail {
 	 * @param presenceGarant : valeur true si la bail a un garant
 	 * @param garant : un garant 
 	 */
-	public Bail (Bailleur bailleur, int duree, String type, Date dateDebut, Date dateFin, float montantLoyer,
-			     float fraisAgence, float charges, float montantCaution, String frequenceRevisionLoyer, boolean presenceGarant,
-			     Garant garant)
+	public Bail (int idBail, int idBailleur, int idLocataire, int idGarant, int duree, String type, Date dateDebut, 
+				 Date dateFin, Date dateEcheance, float montantLoyer, float fraisAgence, float charges, 
+				 float montantCaution, int frequenceRevisionLoyer)
 	{
-		this.bailleur = bailleur;
+		this.idBail = idBail;
+		this.idBailleur = idBailleur;
+		this.idLocataire = idLocataire;
+		this.idGarant = idGarant;
 		this.duree = duree;
 		this.type = type;
 		this.dateDebut = dateDebut;
@@ -105,9 +112,42 @@ public class Bail {
 		this.charges = charges;
 		this.montantCaution = montantCaution;
 		this.frequenceRevisionLoyer = frequenceRevisionLoyer;
-		this.presenceGarant = presenceGarant;
-		this.garant = garant;
-		listeLocataires = new ArrayList<Locataire>();
+	}
+	
+	/**
+	 * getter de l'attribut idBail
+	 * 
+	 * @return l'attribut idBail
+	 */
+	public int getIdBail( ) {
+		return idBail;
+	}
+	
+	/**
+	 * getter de l'attribut idGarant
+	 * 
+	 * @return l'attribut idGarant
+	 */
+	public int getIdGarant( ) {
+		return idGarant;
+	}
+	
+	/**
+	 * getter de l'attribut idBailleur
+	 * 
+	 * @return l'attribut iBailleur
+	 */
+	public int getIdBailleur( ) {
+		return idBailleur;
+	}
+	
+	/**
+	 * getter de l'attribut idLocataire
+	 * 
+	 * @return l'attribut idLocataire
+	 */
+	public int getIdLocataire( ) {
+		return idLocataire;
 	}
 	
 	
@@ -121,30 +161,12 @@ public class Bail {
 	}
 	
 	/**
-	 * setter de l'attribut duree
-	 * 
-	 * @param nomUtilisateur : la nouvelle duree
-	 */
-	public void setDuree (int duree) {
-		this.duree = duree;
-	}
-	
-	/**
 	 * getter de l'attribut type
 	 * 
 	 * @return l'attribut type
 	 */
 	public String getType( ) {
 		return type;
-	}
-	
-	/**
-	 * setter de l'attribut type
-	 * 
-	 * @param nomUtilisateur : le nouveau type
-	 */
-	public void setType (String type) {
-		this.type = type;
 	}
 	
 	/**
@@ -157,15 +179,6 @@ public class Bail {
 	}
 	
 	/**
-	 * setter de l'attribut dateDebut
-	 * 
-	 * @param dateDebut : la nouvelle date
-	 */
-	public void setDateDebut (Date dateDebut) {
-		this.dateDebut = dateDebut;
-	}
-	
-	/**
 	 * getter de l'attribut dateFin
 	 * 
 	 * @return l'attribut dateFin
@@ -175,12 +188,12 @@ public class Bail {
 	}
 	
 	/**
-	 * setter de l'attribut dateFin
+	 * getter de l'attribut dateEcheance
 	 * 
-	 * @param dateFin : la nouvelle date
+	 * @return l'attribut dateEcheance
 	 */
-	public void setDateFin (Date dateFin) {
-		this.dateFin = dateFin;
+	public Date getDateEcheance( ) {
+		return dateEcheance;
 	}
 	
 	/**
@@ -193,30 +206,12 @@ public class Bail {
 	}
 	
 	/**
-	 * setter de l'attribut montantLoyer
-	 * 
-	 * @param montantLoyer : le nouveau montant
-	 */
-	public void setMontantLoyer (float montantLoyer) {
-		this.montantLoyer = montantLoyer;
-	}
-	
-	/**
 	 * getter de l'attribut montantCaution
 	 * 
 	 * @return l'attribut montantCaution
 	 */
 	public float getMontantCaution( ) {
 		return montantCaution;
-	}
-	
-	/**
-	 * setter de l'attribut montantCaution
-	 * 
-	 * @param montantCaution : le nouveau montant
-	 */
-	public void setMontantCaution (float montantCaution) {
-		this.montantCaution = montantCaution;
 	}
 	
 	/**
@@ -229,15 +224,6 @@ public class Bail {
 	}
 	
 	/**
-	 * setter de l'attribut fraisAgence
-	 * 
-	 * @param fraisAgence : la nouvelle valeur des frais
-	 */
-	public void setFraisAgence (float fraisAgence) {
-		this.fraisAgence = fraisAgence;
-	}
-	
-	/**
 	 * getter de l'attribut charges
 	 * 
 	 * @return l'attribut charges
@@ -247,54 +233,19 @@ public class Bail {
 	}
 	
 	/**
-	 * setter de l'attribut charges
-	 * 
-	 * @param charges : la nouvelle valeur des charges
-	 */
-	public void setCharges (float charges) {
-		this.charges = charges;
-	}
-	
-	/**
 	 * getter de l'attribut frequenceRevisionLoyer
 	 * 
 	 * @return l'attribut frequenceRevisionLoyer
 	 */
-	public String getFrequenceRevisionLoyer( ) {
+	public int getFrequenceRevisionLoyer( ) {
 		return frequenceRevisionLoyer;
-	}
-	
-	/**
-	 * setter de l'attribut frequenceRevisionLoyer
-	 * 
-	 * @param frequenceRevisionLoyer : la nouvelle frequence
-	 */
-	public void setFrequenceRevisionLoyer (String frequenceRevisionLoyer) {
-		this.frequenceRevisionLoyer = frequenceRevisionLoyer;
-	}
-	
-	/**
-	 * getter de l'attribut presenceGarant
-	 * 
-	 * @return l'attribut presenceGarant
-	 */
-	public boolean aGarant() {
-		return presenceGarant;
-	}
-	
-	/**
-	 * permet d'ajouter un locataire à la liste
-	 * 
-	 * @param unBail : objet de type Locataire
-	 */
-	public void addLocataire (Locataire unLocataire) {
-		listeLocataires.add(unLocataire);
 	}
 	
 	
 	/**
 	 * affiche les informations sur un bail
 	 */
+	/*
 	public void display() {
 		System.out.print("\nBailleur : \n" + bailleur);
 		System.out.print("\nDuree : " + duree + " mois" + "\nType : " + type);
@@ -319,5 +270,5 @@ public class Bail {
 			}
 		}
 	}
-
+	*/
 }
