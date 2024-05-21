@@ -1,0 +1,619 @@
+package dao;
+import java.sql.*;
+import java.util.ArrayList;
+import model.Bailleur;
+
+/**
+ * Classe d'acces aux donnees contenues dans la table Bailleur
+ * 
+ * @author Ilyas DAOUDA + Nicolas DIOUBATE
+ * @version 1.0
+ * */
+public class BailleurDAO extends ConnectionDAO {
+	/**
+	 * Constructeur de la classe
+	 * 
+	 */
+	public BailleurDAO() {
+		super();
+	}
+	
+	/**
+	 * Convertit true en 1 et false en 0
+	 * 
+	 * @param bool : un booléen
+	 * @return 1 ou 0
+	 */
+	public int convertToBinary(boolean bool) {
+		if (bool == true)
+			return 1;
+		else
+			return 0;
+	}
+	
+	/**
+	 * Permet de récupérer l'id maximum et l'incrémente de 1
+	 * 
+	 * @return (l'Idmax + 1)
+	 */
+	public int getMaxIdBailleur() {
+		Connection con = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+        int maxId = 0;
+        try {
+            // Créer une connexion à la base de données et exécuter une requête pour obtenir le maximum de l'ID
+            // Ici, vous devez utiliser votre logique spécifique pour accéder à la base de données
+            // Par exemple, si vous utilisez JDBC :
+            con = DriverManager.getConnection(URL, LOGIN, PASS);
+            stmt = con.createStatement();
+            rs = stmt.executeQuery("SELECT MAX(idBailleur) AS max_id FROM BAILLEUR");
+            if (rs.next()) {
+                maxId = rs.getInt("max_id");
+            }
+            // Fermer les ressources
+            rs.close();
+            stmt.close();
+            con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+			// fermeture du preparedStatement et de la connexion
+        	try {
+				if (rs != null) {
+					rs.close();
+				}
+			} catch (Exception ignore) {
+			}
+			try {
+				if (stmt != null) {
+					stmt.close();
+				}
+			} catch (Exception ignore) {
+			}
+			try {
+				if (con != null) {
+					con.close();
+				}
+			} catch (Exception ignore) {
+			}
+		}
+        return (maxId+1);
+    }
+
+	/**
+	 * Permet d'ajouter un Bailleur dans la table Bailleur
+	 * Le mode est auto-commit par defaut : chaque insertion est validee
+	 * 
+	 * @param Bailleur le Bailleur a ajouter
+	 * @return retourne le nombre de lignes ajoutees dans la table
+	 */
+	public int addBailleur(Bailleur Bailleur) {
+		Connection con = null;
+		PreparedStatement ps = null;
+		int returnValue = 0;
+
+		// connexion a la base de donnees
+		try {
+
+			// tentative de connexion
+			con = DriverManager.getConnection(URL, LOGIN, PASS);
+			// preparation de l'instruction SQL, chaque ? represente une valeur
+			// a communiquer dans l'insertion.
+			// les getters permettent de recuperer les valeurs des attributs souhaites
+			ps = con.prepareStatement("INSERT INTO Locataire(idBailleur, nom, prenom, adresse, email, telephone, idBien) VALUES(?, ?, ?, ?, ?, ?, ?)");
+			ps.setInt(1, getMaxIdBailleur());
+			ps.setString(2, Bailleur.getNomBailleur());
+			ps.setString(3, Bailleur.getPrenomBailleur());
+			ps.setString(4, Bailleur.getAdresse());
+			ps.setString(5, Bailleur.getEmailBailleur());
+			ps.setString(6, Bailleur.getNumeroBailleur()); // On a mis dans les tables 
+			ps.setInt(7, Bailleur.getIdBien());
+			
+
+			// Execution de la requete
+			returnValue = ps.executeUpdate();
+
+		} catch (Exception e) {
+			if (e.getMessage().contains("ORA-00001"))
+				System.out.println("Cet identifiant de Locataire existe déjà. Ajout impossible !");
+			else
+				e.printStackTrace();
+		} finally {
+			// fermeture du preparedStatement et de la connexion
+			try {
+				if (ps != null) {
+					ps.close();
+				}
+			} catch (Exception ignore) {
+			}
+			try { 
+				if (con != null) {
+					con.close();
+				}
+			} catch (Exception ignore) {
+			}
+		}
+		return returnValue;
+	}
+
+	/**
+	 * Permet de modifier un Bailleur dans la table Bailleur
+	 * Le mode est auto-commit par defaut : chaque modification est validee
+	 * 
+	 * @param Bailleur le Bailleur a modifier
+	 * @return retourne le nombre de lignes modifiees dans la table
+	 */
+	public int updateBailleur(Bailleur Bailleur) {
+		Connection con = null;
+		PreparedStatement ps = null;
+		int returnValue = 0;
+
+		// connexion a la base de donnees
+		try {
+
+			// tentative de connexion
+			con = DriverManager.getConnection(URL, LOGIN, PASS);
+			// preparation de l'instruction SQL, chaque ? represente une valeur
+			// a communiquer dans la modification.
+			// les getters permettent de recuperer les valeurs des attributs souhaites
+			ps = con.prepareStatement("UPDATE Bailleur set nom = ?, prenom = ?, adresse = ?, email = ?, telephone = ?, societe = ?, idBien =?, WHERE idBailleur = ?");
+			ps.setString(1, Bailleur.getNomBailleur());
+			ps.setString(2, Bailleur.getPrenomBailleur());
+			ps.setString(3, Bailleur.getAdresse());
+			ps.setString(4, Bailleur.getEmailBailleur());
+			ps.setString(5, Bailleur.getNumeroBailleur());
+			ps.setInt(6, Bailleur.getIdBien());
+			ps.setInt(7, Bailleur.getIdBailleur());
+
+			// Execution de la requete
+			returnValue = ps.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// fermeture du preparedStatement et de la connexion
+			try {
+				if (ps != null) {
+					ps.close();
+				}
+			} catch (Exception ignore) {
+			}
+			try {
+				if (con != null) {
+					con.close();
+				}
+			} catch (Exception ignore) {
+			}
+		}
+		return returnValue;
+	}
+
+	/**
+	 * Permet de supprimer un Bailleur par idBailleur dans la table Bailleur
+	 * Le mode est auto-commit par defaut : chaque suppression est validee
+	 * 
+	 * @param idBailleur l'identifiant du Bailleur à supprimer
+	 * @return retourne le nombre de lignes supprimees dans la table
+	 */
+	public int deleteBailleur(int idBailleur) {
+		Connection con = null;
+		PreparedStatement ps = null;
+		int returnValue = 0;
+
+		// connexion a la base de donnees
+		try {
+
+			// tentative de connexion
+			con = DriverManager.getConnection(URL, LOGIN, PASS);
+			// preparation de l'instruction SQL, le ? represente la valeur de l'identifiant
+			// a communiquer dans la suppression.
+			// le getter permet de recuperer la valeur de l'identifiant du Bailleur
+			ps = con.prepareStatement("DELETE FROM Bailleur WHERE idBailleur = ?");
+			ps.setInt(1, idBailleur);
+
+			// Execution de la requete
+			returnValue = ps.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// fermeture du preparedStatement et de la connexion
+			try {
+				if (ps != null) {
+					ps.close();
+				}
+			} catch (Exception ignore) {
+			}
+			try {
+				if (con != null) {
+					con.close();
+				}
+			} catch (Exception ignore) {
+			}
+		}
+		return returnValue;
+	}
+
+
+	/**
+	 * Permet de recuperer un Bailleur a partir de son identifiant
+	 * 
+	 * @param idBailleur l'identifiant du fournisseur a recuperer
+	 * @return le Bailleur trouve; null si aucun Bailleur ne correspond a cet identifiant
+	 */
+	public Bailleur getBailleur(int idBailleur) {
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Bailleur returnValue = null;
+
+		// connexion a la base de donnees
+		try {
+
+			con = DriverManager.getConnection(URL, LOGIN, PASS);
+			ps = con.prepareStatement("SELECT * FROM Bailleur WHERE idBailleur = ?");
+			ps.setInt(1, idBailleur);
+
+			// on execute la requete
+			// rs contient un pointeur situe juste avant la premiere ligne retournee
+			rs = ps.executeQuery();
+			// passe a la premiere (et unique) ligne retournee
+			if (rs.next()) {
+				returnValue = new Bailleur(rs.getInt("idBailleur"), rs.getString("nom"), rs.getString("prenom"),
+									       rs.getString("adresse"), rs.getString("email"), rs.getString("telephone"),
+									       rs.getInt("idBien"));
+			}
+		} catch (Exception ee) {
+			ee.printStackTrace();
+		} finally {
+			// fermeture du ResultSet, du PreparedStatement et de la Connexion
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+			} catch (Exception ignore) {
+			}
+			try {
+				if (ps != null) {
+					ps.close();
+				}
+			} catch (Exception ignore) {
+			}
+			try {
+				if (con != null) {
+					con.close();
+				}
+			} catch (Exception ignore) {
+			}
+		}
+		return returnValue;
+	}
+
+	/**
+	 * Permet de recuperer tous les Locataires stockes dans la table Bailleur
+	 * 
+	 * @return une ArrayList de Bailleur
+	 */
+	public ArrayList<Bailleur> getList() {
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		ArrayList<Bailleur> returnValue = new ArrayList<Bailleur>();
+
+		// connexion a la base de donnees
+		try {
+			con = DriverManager.getConnection(URL, LOGIN, PASS);
+			ps = con.prepareStatement("SELECT * FROM Bailleur ORDER BY idBailleur");
+
+			// on execute la requete
+			rs = ps.executeQuery();
+			// on parcourt les lignes du resultat
+			while (rs.next()) {
+				returnValue.add(new Bailleur(rs.getInt("idBailleur"), rs.getString("nom"), rs.getString("prenom"),
+											 rs.getString("adresse"), rs.getString("email"), rs.getString("telephone"),
+											 rs.getInt("idBien")));
+			}
+		} catch (Exception ee) {
+			ee.printStackTrace();
+		} finally {
+			// fermeture du rs, du preparedStatement et de la connexion
+			try {
+				if (rs != null)
+					rs.close();
+			} catch (Exception ignore) {
+			}
+			try {
+				if (ps != null)
+					ps.close();
+			} catch (Exception ignore) {
+			}
+			try {
+				if (con != null)
+					con.close();
+			} catch (Exception ignore) {
+			}
+		}
+		return returnValue;
+	}
+	
+	/**
+	 * ATTENTION : Cette méthode n'a pas vocation à être executée lors d'une utilisation normale du programme !
+	 * Elle existe uniquement pour TESTER les méthodes écrites au-dessus !
+	 * 
+	 * @param args non utilisés
+	 * @throws SQLException si une erreur se produit lors de la communication avec la BDD
+	 */
+	/*
+	public static void main(String[] args) throws SQLException {
+		int returnValue;
+		LocataireDAO LocataireDAO = new LocataireDAO();
+		// Ce test va utiliser directement votre BDD, on essaie d'éviter les collisions avec vos données en prenant de grands ID
+		int[] ids = {424242, 424243, 424244};
+		// test du constructeur
+		Locataire s1 = new Locataire(ids[0], "Ilyas", "Daouda", "Volta");
+		Locataire s2 = new Locataire(ids[1], "Nicolas", "Dioubate", "Turing");
+		Locataire s3 = new Locataire(ids[2], "Chloe", "Cabot", "Charliat");
+		// test de la methode add
+		returnValue = LocataireDAO.addLocataire(s1);
+		System.out.println(returnValue + " Locataire ajoute");
+		returnValue = LocataireDAO.addLocataire(s2);
+		System.out.println(returnValue + " Locataire ajoute");
+		returnValue = LocataireDAO.addLocataire(s3);
+		System.out.println(returnValue + " Locataire ajoute");
+		System.out.println();
+		
+		// test de la methode get
+		Locataire sg = LocataireDAO.getLocataire(1);
+		// appel implicite de la methode toString de la classe Object (a eviter)
+		System.out.println(sg);
+		System.out.println();
+		
+		// test de la methode getList
+		ArrayList<Locataire> list = LocataireDAO.getList();
+		for (Locataire s : list) {
+			// appel explicite de la methode toString de la classe Object (a privilegier)
+			System.out.println(s.toString());
+		}
+		System.out.println();
+		// test de la methode delete
+		// On supprime les 3 Locataires qu'on a créé
+		returnValue = 0;
+		for (int id : ids) {
+//			returnValue = LocataireDAO.deleteLocataire(id);
+			System.out.println(returnValue + " fournisseur supprime");
+		}
+		
+		System.out.println();
+	}
+	*/
+
+	/**
+	 * ATTENTION : Cette méthode n'a pas vocation à être executée lors d'une utilisation normale du programme !
+	 * Elle existe uniquement pour TESTER les méthodes écrites au-dessus !
+	 * 
+	 * @param args non utilisés
+	 * @throws SQLException si une erreur se produit lors de la communication avec la BDD
+	 */
+	
+	
+	public String getBailleurId(int idBailleur) {
+	    Connection con = null;
+	    PreparedStatement ps = null;
+	    ResultSet rs = null;
+	    String returnValue = null; // Pour stocker l'ID
+
+	    try {
+	        con = DriverManager.getConnection(URL, LOGIN, PASS);
+	        ps = con.prepareStatement("SELECT idBailleur FROM Bailleur WHERE idBailleur = ?");
+	        ps.setInt(1, idBailleur);
+
+	        // Exécution de la requête
+	        rs = ps.executeQuery();
+	        
+	        // Si une ligne est retournée
+	        if (rs.next()) {
+	            returnValue = rs.getString("idBailleur"); // Récupération de l'ID
+	        }
+	    } catch (Exception ee) {
+	        ee.printStackTrace();
+	    } finally {
+	        // Fermeture des ressources
+	        try {
+	            if (rs != null) {
+	                rs.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	        try {
+	            if (ps != null) {
+	                ps.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	        try {
+	            if (con != null) {
+	                con.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	    }
+	    return returnValue;
+	}
+	
+	public String getBailleurNom(int idBailleur) {
+	    Connection con = null;
+	    PreparedStatement ps = null;
+	    ResultSet rs = null;
+	    String returnValue = null; // Pour stocker l'ID
+
+	    try {
+	        con = DriverManager.getConnection(URL, LOGIN, PASS);
+	        ps = con.prepareStatement("SELECT nom FROM Bailleur WHERE idBailleur = ?");
+	        ps.setInt(1, idBailleur);
+
+	        // Exécution de la requête
+	        rs = ps.executeQuery();
+	        
+	        // Si une ligne est retournée
+	        if (rs.next()) {
+	            returnValue = rs.getString("nom"); // Récupération de l'ID
+	        }
+	    } catch (Exception ee) {
+	        ee.printStackTrace();
+	    } finally {
+	        // Fermeture des ressources
+	        try {
+	            if (rs != null) {
+	                rs.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	        try {
+	            if (ps != null) {
+	                ps.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	        try {
+	            if (con != null) {
+	                con.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	    }
+	    return returnValue;
+	}
+	
+	public String getBailleurPrenom(int idBailleur) {
+	    Connection con = null;
+	    PreparedStatement ps = null;
+	    ResultSet rs = null;
+	    String returnValue = null; // Pour stocker l'ID
+
+	    try {
+	        con = DriverManager.getConnection(URL, LOGIN, PASS);
+	        ps = con.prepareStatement("SELECT prenom FROM Bailleur WHERE idBailleur = ?");
+	        ps.setInt(1, idBailleur);
+
+	        // Exécution de la requête
+	        rs = ps.executeQuery();
+	        
+	        // Si une ligne est retournée
+	        if (rs.next()) {
+	            returnValue = rs.getString("prenom"); // Récupération de l'ID
+	        }
+	    } catch (Exception ee) {
+	        ee.printStackTrace();
+	    } finally {
+	        // Fermeture des ressources
+	        try {
+	            if (rs != null) {
+	                rs.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	        try {
+	            if (ps != null) {
+	                ps.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	        try {
+	            if (con != null) {
+	                con.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	    }
+	    return returnValue;
+	}
+	
+	public String getBailleurAdresse(int idBailleur) {
+	    Connection con = null;
+	    PreparedStatement ps = null;
+	    ResultSet rs = null;
+	    String returnValue = null; // Pour stocker l'ID
+
+	    try {
+	        con = DriverManager.getConnection(URL, LOGIN, PASS);
+	        ps = con.prepareStatement("SELECT adresse FROM Bailleur WHERE idBailleur = ?");
+	        ps.setInt(1, idBailleur);
+
+	        // Exécution de la requête
+	        rs = ps.executeQuery();
+	        
+	        // Si une ligne est retournée
+	        if (rs.next()) {
+	            returnValue = rs.getString("adresse"); // Récupération de l'ID
+	        }
+	    } catch (Exception ee) {
+	        ee.printStackTrace();
+	    } finally {
+	        // Fermeture des ressources
+	        try {
+	            if (rs != null) {
+	                rs.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	        try {
+	            if (ps != null) {
+	                ps.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	        try {
+	            if (con != null) {
+	                con.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	    }
+	    return returnValue;
+	}
+	
+	public String getBailleurEmail(int idBailleur) {
+	    Connection con = null;
+	    PreparedStatement ps = null;
+	    ResultSet rs = null;
+	    String returnValue = null; // Pour stocker l'ID
+
+	    try {
+	        con = DriverManager.getConnection(URL, LOGIN, PASS);
+	        ps = con.prepareStatement("SELECT email FROM Bailleur WHERE idBailleur = ?");
+	        ps.setInt(1, idBailleur);
+
+	        // Exécution de la requête
+	        rs = ps.executeQuery();
+	        
+	        // Si une ligne est retournée
+	        if (rs.next()) {
+	            returnValue = rs.getString("email"); // Récupération de l'ID
+	        }
+	    } catch (Exception ee) {
+	        ee.printStackTrace();
+	    } finally {
+	        // Fermeture des ressources
+	        try {
+	            if (rs != null) {
+	                rs.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	        try {
+	            if (ps != null) {
+	                ps.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	        try {
+	            if (con != null) {
+	                con.close();
+	            }
+	        } catch (Exception ignore) {
+	        }
+	    }
+	    return returnValue;
+	}
+}
