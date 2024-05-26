@@ -1,0 +1,165 @@
+package gui;
+import dao.GarantDAO;
+import javax.swing.ImageIcon;
+import java.awt.Image;
+import java.awt.Dimension;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JTextField;
+
+import model.Garant;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Color;
+import javax.swing.JPasswordField;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.ActionEvent;
+import java.awt.Container;
+import java.awt.GridLayout;
+import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.JPanel;
+import javax.swing.JTable;
+
+
+
+public class AjoutGarant extends JFrame{
+
+	    private JTextField nomGarant;
+	    private JTextField prenomGarant;
+	    private JTextField adresse;
+	    private JPanel jlBackground;
+	    private JButton enregistrer;
+	    private boolean enregistrerButton = false;
+ 
+		private Container container;
+
+	    
+	
+
+public AjoutGarant (String title, int width, int height  ) {
+		
+		this.setTitle(title);
+		this.setSize(width, height);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+        
+        nomGarant = new JTextField("Nom du garant");
+        prenomGarant = new JTextField("Prénom du garant"); 
+        adresse = new JTextField("Adresse du garant");
+		
+        
+        
+        jlBackground = new JPanel();
+		this.setContentPane(jlBackground);
+		enregistrer = new JButton("Enregistrer");
+		container = this.getContentPane();
+		
+		
+		
+		container.setLayout(null); // Définir le layout sur null pour permettre le positionnement absolu
+       // idGarant.setBounds(100,50,150,30);
+        nomGarant.setBounds(100,90,150,30);
+        prenomGarant.setBounds(100,130,150,30);
+        adresse.setBounds(100,170,150,30);
+        enregistrer.setBounds(300, 650, 150, 30);
+        
+        // Ajout d'un écouteur de focus au champ de texte du nom du garant
+        nomGarant.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                // Efface le texte indicatif lorsque le champ de texte obtient le focus
+                if (nomGarant.getText().equals("Nom du garant")) {
+                	nomGarant.setText("");
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                // Restaure le texte indicatif si le champ de texte est vide lorsqu'il perd le focus
+                if (nomGarant.getText().isEmpty()) {
+                	nomGarant.setText("Nom du garant");
+                }
+            }
+        });
+        
+        // Ajout d'un écouteur de focus au champ de texte du prénom du garant
+        prenomGarant.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                // Efface le texte indicatif lorsque le champ de texte obtient le focus
+                if (prenomGarant.getText().equals("Prénom du garant")) {
+                	prenomGarant.setText("");
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                // Restaure le texte indicatif si le champ de texte est vide lorsqu'il perd le focus
+                if (prenomGarant.getText().isEmpty()) {
+                	prenomGarant.setText("Prénom du garant");
+                }
+            }
+        });
+        
+        // Ajout d'un écouteur de focus au champ de texte de l'adresse du garant
+        adresse.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                // Efface le texte indicatif lorsque le champ de texte obtient le focus
+                if (adresse.getText().equals("Adresse du garant")) {
+                	adresse.setText("");
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                // Restaure le texte indicatif si le champ de texte est vide lorsqu'il perd le focus
+                if (adresse.getText().isEmpty()) {
+                	adresse.setText("Adresse du garant");
+                }
+            }
+        });
+
+        
+        container.add(nomGarant);
+        container.add(prenomGarant);
+        container.add(adresse);
+        container.add(enregistrer);
+        
+		//jlBackground.setBackground(Color.BLACK);
+		
+        this.setLocationRelativeTo(null);
+		this.setVisible(true);
+		
+		
+		
+		enregistrer.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		    	
+		    	String nomGarantText = nomGarant.getText();
+		    	String prenomGarantText = prenomGarant.getText();
+		    	String adresseText = adresse.getText();		    	
+		    	
+		    	GarantDAO garantDAO = new GarantDAO();
+		    	
+		    	Garant garant1 = new Garant(0, nomGarantText,prenomGarantText, adresseText);
+
+		    	garantDAO.addGarant(garant1);
+		        
+		
+		    }
+		}
+		
+				);
+		
+
+}
+public boolean enregistrerClicked() {
+	return enregistrerButton;
+}
+		    
+}
