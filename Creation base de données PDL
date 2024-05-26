@@ -1,11 +1,23 @@
-DROP TABLE BAIL_LOCATAIRE;
-DROP TABLE BAIL;
-DROP TABLE LOCATAIRE;
-DROP TABLE BAILLEUR;
-DROP TABLE BIEN;
-DROP TABLE GARANT;
-DROP TABLE EMPLOYE;
-DROP TABLE ECHEANCE;
+-- Suppression de la table BAIL_LOCATAIRE
+DROP TABLE BAIL_LOCATAIRE CASCADE CONSTRAINTS;
+
+-- Suppression de la table LOCATAIRE
+DROP TABLE LOCATAIRE CASCADE CONSTRAINTS;
+
+-- Suppression de la table BAILLEUR
+DROP TABLE BAILLEUR CASCADE CONSTRAINTS;
+
+-- Suppression de la table BAIL
+DROP TABLE BAIL CASCADE CONSTRAINTS ;
+
+-- Suppression de la table GARANT
+DROP TABLE GARANT CASCADE CONSTRAINTS;
+
+-- Suppression de la table EMPLOYE
+DROP TABLE EMPLOYE CASCADE CONSTRAINTS ;
+
+-- Suppression de la table ECHEANCE
+DROP TABLE ECHEANCE CASCADE CONSTRAINTS;
 
 
 CREATE TABLE GARANT (
@@ -81,14 +93,14 @@ CREATE TABLE LOCATAIRE (
 CREATE TABLE BAIL (
     idBail NUMBER PRIMARY KEY,
     typeBail VARCHAR2(50),
-    datePriseEffet DATE,
+    datePriseEffet VARCHAR2(50),
     duree NUMBER,
-    dateFin DATE,
+    dateFin VARCHAR2(50),
     montantLoyer FLOAT,
     charges FLOAT,
     montantCaution FLOAT,
     fraisAgence FLOAT,
-    dateEcheance DATE,
+    dateEcheance Number,
     freqRevision NUMBER,
     idBailleur NUMBER,
     idLocataire NUMBER,
@@ -114,7 +126,7 @@ CREATE TABLE EMPLOYE(
 
 CREATE TABLE ECHEANCE (
 idEcheance NUMBER PRIMARY KEY,
-dateEcheance DATE,
+dateEcheance VARCHAR2(50),
 statutPaiement VARCHAR2(50) DEFAULT 'impayé',
 historique NUMBER ,
 montantLoyer NUMBER , 
@@ -140,3 +152,39 @@ VALUES (2, 'Appartement', 80, 0, 1, 2, 1990, 6, 'Marseille', 12, 2, 5, 'Avenue',
 
 INSERT INTO EMPLOYE(idEmploye, login, password)
 VALUES (2,'a','a');
+
+-- Insertion des biens nécessaires pour les bailleurs et locataires
+INSERT INTO BIEN (idBien, typeBien, surfaceBien, CodePostal, isMaisonIndividuelle, isAppartement, nombreChambre, anneeConstruction, arrondissement, ville, numAppartement, numEtage, numRue, typeRue, nomRue, nomResidence, isChauffageIndividuel, typeChauffage, isJardin, surfaceJardin, isMeuble, isTerrain, surfaceTerrain, isEscalier, isCave, isSousSol, isCour, surfaceCour, isBalcon, surfaceBalcon, isTerrasse, surfaceTerasse, descriptionMeuble)
+VALUES
+(1, 'Maison', 150, 75015, 1, 0, 4, 2005, 15, 'Paris', NULL, NULL, 10, 'Rue', 'Example Street', 'Example Residence', 1, 'Gaz', 1, 300, 0, 0, NULL, 0, 0, 1, 1, 100, 0, NULL, 0, NULL, 'Meublé');
+INSERT INTO BIEN (idBien, typeBien, surfaceBien, CodePostal, isMaisonIndividuelle, isAppartement, nombreChambre, anneeConstruction, arrondissement, ville, numAppartement, numEtage, numRue, typeRue, nomRue, nomResidence, isChauffageIndividuel, typeChauffage, isJardin, surfaceJardin, isMeuble, isTerrain, surfaceTerrain, isEscalier, isCave, isSousSol, isCour, surfaceCour, isBalcon, surfaceBalcon, isTerrasse, surfaceTerasse, descriptionMeuble)
+VALUES
+(2, 'Appartement', 80, 13006, 0, 1, 2, 1990, 6, 'Marseille', 12, 2, 5, 'Avenue', 'Sample Avenue', 'Sample Residence', 0, 'Electrique', 0, NULL, 0, 0, NULL, 1, 0, 0, 0, NULL, 1, 15.5, 0, NULL, 'Non meublé');
+INSERT INTO BIEN (idBien, typeBien, surfaceBien, CodePostal, isMaisonIndividuelle, isAppartement, nombreChambre, anneeConstruction, arrondissement, ville, numAppartement, numEtage, numRue, typeRue, nomRue, nomResidence, isChauffageIndividuel, typeChauffage, isJardin, surfaceJardin, isMeuble, isTerrain, surfaceTerrain, isEscalier, isCave, isSousSol, isCour, surfaceCour, isBalcon, surfaceBalcon, isTerrasse, surfaceTerasse, descriptionMeuble)
+VALUES
+(3, 'Maison', 120, 69001, 1, 0, 3, 2010, 1, 'Lyon', NULL, NULL, 20, 'Boulevard', 'Demo Boulevard', 'Demo Residence', 1, 'Gaz', 1, 200, 0, 0, NULL, 0, 1, 0, 1, 50, 1, 30, 1, 40, 'Partiellement meublé');
+
+-- Insertion des bailleurs
+INSERT INTO BAILLEUR (idBailleur, nom, prenom, adresse, email, telephone, idBien)
+VALUES 
+(1, 'Dupont', 'Jean', '10 Rue Example, 75015 Paris', 'jean.dupont@example.com', '0102030405', 1);
+INSERT INTO BAILLEUR (idBailleur, nom, prenom, adresse, email, telephone, idBien)
+VALUES 
+(2, 'Martin', 'Paul', '5 Avenue Sample, 13006 Marseille', 'paul.martin@example.com', '0607080910', 2);
+INSERT INTO BAILLEUR (idBailleur, nom, prenom, adresse, email, telephone, idBien)
+VALUES 
+(3, 'Durand', 'Marie', '20 Boulevard Demo, 69001 Lyon', 'marie.durand@example.com', '0708091011', 3);
+
+-- Insertion des locataires
+INSERT INTO LOCATAIRE (idLocataire, nom, prenom, adresse, email, telephone, societe, raisonSociale, idBien)
+VALUES 
+(1, 'Lemoine', 'Alice', '30 Rue Fiction, 75015 Paris', 'alice.lemoine@example.com', '0102030406', 0, NULL, 1);
+INSERT INTO LOCATAIRE (idLocataire, nom, prenom, adresse, email, telephone, societe, raisonSociale, idBien)
+VALUES 
+(2, 'Bernard', 'Luc', '40 Avenue Imaginaire, 13006 Marseille', 'luc.bernard@example.com', '0607080911', 1, 'Luc Entreprise', 2);
+INSERT INTO LOCATAIRE (idLocataire, nom, prenom, adresse, email, telephone, societe, raisonSociale, idBien)
+VALUES 
+(3, 'Roux', 'Nina', '50 Boulevard Virtuel, 69001 Lyon', 'nina.roux@example.com', '0708091012', 0, NULL, 3);
+
+INSERT INTO GARANT (idGarant, nomGarant, prenomGarant, adresse)
+VALUES (1, 'Smith', 'John', '123 rue de l''Exemple, VilleExemple');
