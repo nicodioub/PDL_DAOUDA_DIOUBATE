@@ -1,76 +1,36 @@
-package model;
+package dao;
+
 /**
- * Classe representant un Garant (extension de personne)
+ * Classe d'acces a la base de donnees
  * 
- * @author DAOUDA Ilyas + DIOUBATE Nicolas
+ * @author Ilyas DAOUDA + Nicolas DIOUBATE
  * @version 1.0
- */
-public class Garant extends Personne {
+ * */
+public class ConnectionDAO {
 	/**
-	 * Identifiant du garant
+	 * Parametres de connexion a la base de donnees oracle
+	 * URL, LOGIN et PASS sont des constantes
 	 */
-	private int idGarant;
+	// À utiliser si vous êtes sur une machine personnelle :
+	final static String URL   = "jdbc:oracle:thin:@oracle.esigelec.fr:1521:orcl";
 	
-	/**
-	 * Adresse du garant
-	 */
-	private String adresse;
+	// À utiliser si vous êtes sur une machine de l'école :
+	// final static String URL   = "jdbc:oracle:thin:@//srvoracledb.intranet.int:1521/orcl.intranet.int";
 	
-	/**
-	 * Constructeur de la classe Garant
-	 * 
-	 * @param idGarant : identifiant quelconque
-	 * @param unNom : nom quelconque
-	 * @param unPrenom : prenom quelconque
-	 * @param adresse : adresse quelconque
-	 */
-	public Garant (int idGarant, String unNom, String unPrenom, String adresse)
-	{
-		super(unNom, unPrenom, null, null);
-		this.adresse = adresse;
-		this.idGarant = idGarant;
-	}
-	
-	/**
-	 * getter de l'attribut idGarant
-	 * 
-	 * @return l'attribut idGarant
-	 */
-	public int getIdGarant () {
-		return idGarant;
-	}
-	
-	/**
-	 * getter de l'attribut adresse
-	 * 
-	 * @return l'attribut adresse
-	 */
-	public String getAdresse() {
-		return adresse;
-	}
 
-
-	/**
-	 * setter de l'attribut adresse
-	 * 
-	 * @param adresse : nouvelle valeur pour l'adresse du garant
-	 */
-	public void setAdresse(String adresse) {
-		this.adresse = adresse;
-	}
+	final static String LOGIN = "C##BDD3_8";   
+	final static String PASS  = "BDD38";   
 	
 	/**
-	 * affiche les informations sur un garant (personne)
+	 * Constructor
+	 * 
 	 */
-	@Override
-	public void display() {
-		super.display();
-		System.out.println("Identifiant du garant : " + idGarant);
-		System.out.println("Adresse : ");
-		if (adresse == null)
-			System.out.print("Pas d'adresse enregistree");
-		else
-			System.out.print(adresse);
+	public ConnectionDAO() {
+		// chargement du pilote de bases de donnees
+		try {
+			Class.forName("oracle.jdbc.OracleDriver");
+		} catch (ClassNotFoundException e) {
+			System.err.println("Impossible de charger le pilote de BDD, ne pas oublier d'importer le fichier .jar dans le projet");
+		}
 	}
-
 }
