@@ -240,35 +240,4 @@ public class Bail {
 	public int getFrequenceRevisionLoyer( ) {
 		return frequenceRevisionLoyer;
 	}
-	
-	
-	/**
-	 * affiche les informations sur un bail
-	 */
-	/*
-	public void display() {
-		System.out.print("\nBailleur : \n" + bailleur);
-		System.out.print("\nDuree : " + duree + " mois" + "\nType : " + type);
-		System.out.print("\nDate de debut : " + dateDebut + "\nDate de fin : " + dateFin);
-		System.out.print("\nMontant du loyer : " + montantLoyer + " euros");
-		System.out.print("\nMontant de la caution : " + montantCaution + " euros");
-		System.out.print("\nFrais d'agence : " + fraisAgence + " euros");
-		System.out.print("\nCharges : " + charges + " euros");
-		System.out.print("\nFrequence de revision du loyer : " + frequenceRevisionLoyer);
-		System.out.print("\nGarant : ");
-		if (presenceGarant == true) {
-			System.out.print("Oui");
-			garant.display();
-		}
-		else
-			System.out.print("Non");
-		if (listeLocataires.size() > 0) {
-			for(int i=0; i<listeLocataires.size(); i++) {
-				System.out.print("\nLocataire n°" + (i+1) + ": ");
-				listeLocataires.get(i).display();
-				
-			}
-		}
-	}
-	*/
 }
