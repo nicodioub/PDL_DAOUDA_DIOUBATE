@@ -17,6 +17,56 @@ public class GarantDAO extends ConnectionDAO {
 	public GarantDAO() {
 		super();
 	}
+	
+	/**
+	 * Permet de récupérer l'id maximum et l'incrémente de 1
+	 * 
+	 * @return (l'Idmax + 1)
+	 */
+	public int getMaxIdGarant() {
+		Connection con = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+        int maxId = 0;
+        try {
+            // Créer une connexion à la base de données et exécuter une requête pour obtenir le maximum de l'ID
+            // Ici, vous devez utiliser votre logique spécifique pour accéder à la base de données
+            // Par exemple, si vous utilisez JDBC :
+            con = DriverManager.getConnection(URL, LOGIN, PASS);
+            stmt = con.createStatement();
+            rs = stmt.executeQuery("SELECT MAX(idGarant) AS max_id FROM GARANT");
+            if (rs.next()) {
+                maxId = rs.getInt("max_id");
+            }
+            // Fermer les ressources
+            rs.close();
+            stmt.close();
+            con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+			// fermeture du preparedStatement et de la connexion
+        	try {
+				if (rs != null) {
+					rs.close();
+				}
+			} catch (Exception ignore) {
+			}
+			try {
+				if (stmt != null) {
+					stmt.close();
+				}
+			} catch (Exception ignore) {
+			}
+			try {
+				if (con != null) {
+					con.close();
+				}
+			} catch (Exception ignore) {
+			}
+		}
+        return (maxId+1);
+    }
 
 	/**
 	 * Permet d'ajouter un garant dans la table GARANT
@@ -39,9 +89,9 @@ public class GarantDAO extends ConnectionDAO {
 			// a communiquer dans l'insertion.
 			// les getters permettent de recuperer les valeurs des attributs souhaites
 			ps = con.prepareStatement("INSERT INTO GARANT(idGarant, nomGarant, prenomGarant, adresse) VALUES(?, ?, ?, ?)");
-			ps.setInt(1, garant.getIdGarant());
-			ps.setString(2, garant.getNom());
-			ps.setString(3, garant.getPrenom());
+			ps.setInt(1, getMaxIdGarant());
+			ps.setString(2, garant.getNomGarant());
+			ps.setString(3, garant.getPrenomGarant());
 			ps.setString(4, garant.getAdresse());
 
 			// Execution de la requete
@@ -60,7 +110,7 @@ public class GarantDAO extends ConnectionDAO {
 				}
 			} catch (Exception ignore) {
 			}
-			try {
+			try { 
 				if (con != null) {
 					con.close();
 				}
@@ -91,8 +141,8 @@ public class GarantDAO extends ConnectionDAO {
 			// a communiquer dans la modification.
 			// les getters permettent de recuperer les valeurs des attributs souhaites
 			ps = con.prepareStatement("UPDATE GARANT set nomGarant = ?, prenomGarant = ?, adresse = ? WHERE idGarant = ?");
-			ps.setString(1, garant.getNom());
-			ps.setString(2, garant.getPrenom());
+			ps.setString(1, garant.getNomGarant());
+			ps.setString(2, garant.getPrenomGarant());
 			ps.setString(3, garant.getAdresse());
 			ps.setInt(4, garant.getIdGarant());
 
@@ -267,55 +317,5 @@ public class GarantDAO extends ConnectionDAO {
 			}
 		}
 		return returnValue;
-	}
-
-	
-	/**
-	 * ATTENTION : Cette méthode n'a pas vocation à être executée lors d'une utilisation normale du programme !
-	 * Elle existe uniquement pour TESTER les méthodes écrites au-dessus !
-	 * 
-	 * @param args non utilisés
-	 * @throws SQLException si une erreur se produit lors de la communication avec la BDD
-	 */
-	public static void main(String[] args) throws SQLException {
-		int returnValue;
-		GarantDAO garantDAO = new GarantDAO();
-		// Ce test va utiliser directement votre BDD, on essaie d'éviter les collisions avec vos données en prenant de grands ID
-		int[] ids = {424242, 424243, 424244};
-		// test du constructeur
-		Garant s1 = new Garant(ids[0], "Ilyas", "Daouda", "Volta");
-		Garant s2 = new Garant(ids[1], "Nicolas", "Dioubate", "Turing");
-		Garant s3 = new Garant(ids[2], "Chloe", "Cabot", "Charliat");
-		// test de la methode add
-		returnValue = garantDAO.addGarant(s1);
-		System.out.println(returnValue + " garant ajoute");
-		returnValue = garantDAO.addGarant(s2);
-		System.out.println(returnValue + " garant ajoute");
-		returnValue = garantDAO.addGarant(s3);
-		System.out.println(returnValue + " garant ajoute");
-		System.out.println();
-		
-		// test de la methode get
-		Garant sg = garantDAO.getGarant(1);
-		// appel implicite de la methode toString de la classe Object (a eviter)
-		System.out.println(sg);
-		System.out.println();
-		
-		// test de la methode getList
-		ArrayList<Garant> list = garantDAO.getList();
-		for (Garant s : list) {
-			// appel explicite de la methode toString de la classe Object (a privilegier)
-			System.out.println(s.toString());
-		}
-		System.out.println();
-		// test de la methode delete
-		// On supprime les 3 garants qu'on a créé
-		returnValue = 0;
-		for (int id : ids) {
-//			returnValue = garantDAO.deleteGarant(id);
-			System.out.println(returnValue + " fournisseur supprime");
-		}
-		
-		System.out.println();
 	}
 }
